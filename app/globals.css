@@ -305,7 +305,7 @@ button:disabled {
 .review__stars svg {
   width: 16px;
   height: 16px;
-  fill: #0564f1;
+  color: #0564f1;
 }
 
 .reviews__btn--wrapper {
