@@ -728,3 +728,19 @@ button:disabled {
     width: 24px;
     height: 24px;
 }
+
+.btn.guest__btn--wrapper:hover {
+    background-color: #25396b !important;
+}
+
+.btn.google__btn--wrapper:hover {
+    background-color: #3367d6 !important;
+}
+
+.auth__close--btn:hover {
+    opacity: .5;
+}
+
+.auth__switch--btn:hover {
+    background-color: #e1e9e8;
+}

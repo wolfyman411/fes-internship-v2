@@ -38,7 +38,7 @@ export default function Login() {
                     <div className="auth__separator">
                         <div className="auth__separator--text">or</div>
                     </div>
-                    <form action="" className="auth__main--form">
+                    <form action="/" className="auth__main--form">
                         <input type="text" className="auth__main--input" placeholder='Email Address' autoComplete='current-email'/>
                         <input type="password" className="auth__main--input" placeholder='Password' autoComplete='current-password'/>
                         <button className="btn">
