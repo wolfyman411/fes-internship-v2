@@ -1,9 +1,15 @@
+"use client"
+
 import { faStar } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 import Review from './components/review'
+import { useBoundStore } from '../zustand/zustand'
 
 export default function Reviews() {
+
+  const toggleLogin = useBoundStore((state:any) => state.toggleLogin)
+
   return (
     <section id="reviews">
       <div className="row">
@@ -15,7 +21,7 @@ export default function Reviews() {
               <Review name={"Nathan S."} review={<>This app is a great way to get the main takeaways from a book without having to read the entire thing. <b>The summaries are well-written and informative.</b> Definitely worth downloading.</>}/>
               <Review name={"Ryan R."} review={<>If you're a busy person who <b>loves reading but doesn't have the time</b> to read every book in full, this app is for you! The summaries are thorough and provide a great overview of the book's content.</>}/>
             <div className="reviews__btn--wrapper">
-              <button className="btn home__cta--btn">Login</button>
+              <button className="btn home__cta--btn" onClick={toggleLogin}>Login</button>
             </div>
           </div>
         </div>

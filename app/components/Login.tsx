@@ -1,11 +1,19 @@
+"use client"
+
 import React from 'react'
 import Image from 'next/image'
 import googleImg from "../assets/google.png"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMultiply, faUser } from '@fortawesome/free-solid-svg-icons'
+import { useBoundStore } from '../zustand/zustand'
 
 export default function Login() {
+
+  const openAuth = useBoundStore((state:any) => state.loginOpen)
+  const toggleLogin = useBoundStore((state:any) => state.toggleLogin)
+
   return (
+    (openAuth &&
     <div className="wrapper wrapper__full">
         <div className="sidebar__overlay sidebar__overlay--hidden"></div>
         <div className="auth__wrapper">
@@ -31,8 +39,8 @@ export default function Login() {
                         <div className="auth__separator--text">or</div>
                     </div>
                     <form action="" className="auth__main--form">
-                        <input type="text" className="auth__main--input" typeof='text' placeholder='Email Address'/>
-                        <input type="text" className="auth__main--input" typeof='password' placeholder='Password'/>
+                        <input type="text" className="auth__main--input" placeholder='Email Address' autoComplete='current-email'/>
+                        <input type="password" className="auth__main--input" placeholder='Password' autoComplete='current-password'/>
                         <button className="btn">
                             <span>Login</span>
                         </button>
@@ -40,11 +48,12 @@ export default function Login() {
                 </div>
                 <div className="auth__forgot--password">Forgot your password?</div>
                 <button className="auth__switch--btn">Don't have an account?</button>
-                <div className="auth__close--btn">
+                <div className="auth__close--btn" onClick={() => {toggleLogin()}}>
                     <FontAwesomeIcon icon={faMultiply}/>
                 </div>
             </div>
         </div>
     </div>
+    )
   )
 }
