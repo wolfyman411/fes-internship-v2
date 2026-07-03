@@ -1,8 +1,40 @@
+"use client"
+
 import { faMicrophone, faFile, faLightbulb } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 export default function Features() {
+
+  const activeIndex = useRef(0)
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (activeIndex.current < 5) {
+        activeIndex.current += 1
+      }
+      else {
+        activeIndex.current = 0
+      }
+      // Change the displays
+      const wrappers = document.querySelectorAll(".statistics__content--header")
+      for (let wrapper of wrappers) {
+        for (let i = 0; i < wrapper.children.length; i++) {
+          // Remove the active element UNLESS the index is correct
+          if (i !== activeIndex.current) {
+            wrapper.children[i].classList.remove("statistics__heading--active")
+          }
+          else {
+            wrapper.children[i].classList.add("statistics__heading--active")
+          }
+        }
+      }
+    }, 2000)
+
+      return () => clearInterval(interval) // Stops when unmounted
+  },[])
+
+
   return (
     <section id="features">
       <div className="container">
@@ -39,7 +71,7 @@ export default function Features() {
           </div>
           <div className="statistics__wrapper">
             <div className="statistics__content--header">
-              <div className="statistics__heading">Enhance your knowledge</div>
+              <div className="statistics__heading statistics__heading--active">Enhance your knowledge</div>
               <div className="statistics__heading">Achieve greater success</div>
               <div className="statistics__heading">Improve your health</div>
               <div className="statistics__heading">
@@ -101,7 +133,7 @@ export default function Features() {
             <div
               className="statistics__content--header statistics__content--header-second"
             >
-              <div className="statistics__heading">Expand your learning</div>
+              <div className="statistics__heading statistics__heading--active">Expand your learning</div>
               <div className="statistics__heading">Accomplish your goals</div>
               <div className="statistics__heading">Strengthen your vitality</div>
               <div className="statistics__heading">Become a better caregiver</div>
