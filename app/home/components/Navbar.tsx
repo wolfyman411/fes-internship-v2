@@ -2,8 +2,8 @@
 
 import React from 'react'
 import Image from 'next/image'
-import logo from "../assets/logo.png"
-import { useBoundStore } from '../zustand/zustand'
+import logo from "../../assets/logo.png"
+import { useBoundStore } from '../../zustand/zustand'
 
 export default function Navbar() {
 

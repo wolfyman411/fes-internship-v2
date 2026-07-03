@@ -6,6 +6,7 @@ import googleImg from "../assets/google.png"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMultiply, faUser } from '@fortawesome/free-solid-svg-icons'
 import { useBoundStore } from '../zustand/zustand'
+import Link from 'next/link'
 
 export default function Login() {
 
@@ -47,9 +48,11 @@ export default function Login() {
                         <form action="/" className="auth__main--form">
                             <input type="text" className="auth__main--input" placeholder='Email Address' autoComplete='current-email'/>
                             <input type="password" className="auth__main--input" placeholder='Password' autoComplete='current-password'/>
-                            <button className="btn">
-                                <span>Login</span>
-                            </button>
+                            <Link href={"/for-you"}>
+                                <button className="btn"  onClick={() => {toggleLogin()}}>
+                                    <span>Login</span>
+                                </button>
+                            </Link>
                         </form>
                     </div>
                     <div className="auth__forgot--password">Forgot your password?</div>
