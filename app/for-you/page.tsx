@@ -1,12 +1,9 @@
 "use client"
 
 import React, { useEffect, useState } from 'react'
-import Searchbar from '../components/Searchbar'
-import Sidebar from '../components/Sidebar'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
-import Image from 'next/image'
 import BooksDisplay from './components/BooksDisplay'
 
 export default function page() {
@@ -54,8 +51,6 @@ export default function page() {
 
   return (
     <>
-    <Searchbar/>
-    <Sidebar/>
     <div className="row">
       <div className="container">
         <div className="for-you__wrapper">
