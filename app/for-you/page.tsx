@@ -7,36 +7,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
 import Image from 'next/image'
+import BooksDisplay from './components/BooksDisplay'
 
 export default function page() {
-
-  interface Book {
-    id:string,
-    author:string,
-    title:string,
-    subTitle:string,
-    imageLink:string,
-    audioLink:string,
-    totalRating:number,
-    averageRating:number,
-    keyIdeas:number,
-    type:string,
-    status:string,
-    subscriptionRequired:boolean,
-    summary:string,
-    tags:[string],
-    bookDescription:string,
-    authorDescription:string
-  }
 
   const [selectedBook,setSelectedBook] = useState<Book>({} as Book)
   const [loaded,setLoaded] = useState(false)
 
   useEffect(() => {
-    getData()
+    getSelected()
   },[])
 
-  async function getData() {
+  async function getSelected() {
     setLoaded(false)
     const {data}:any = await axios.get("https://us-central1-summaristt.cloudfunctions.net/getBooks?status=selected")
     setSelectedBook(data[0])
@@ -82,16 +64,12 @@ export default function page() {
           <div>
             <div className="for-you__title">Recommended For You</div>
             <div className="for-you__sub--title">We think you'll like these</div>
-            <div className="for-you__recommended--books">
-
-            </div>
+            <BooksDisplay apiCall={"https://us-central1-summaristt.cloudfunctions.net/getBooks?status=recommended"}/>
           </div>
           <div>
             <div className="for-you__title">Suggested Books</div>
             <div className="for-you__sub--title">Browse those books</div>
-            <div className="for-you__recommended--books">
-
-            </div>
+            <BooksDisplay apiCall={"https://us-central1-summaristt.cloudfunctions.net/getBooks?status=suggested"}/>
           </div>
         </div>
       </div>
