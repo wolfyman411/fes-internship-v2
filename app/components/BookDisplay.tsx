@@ -1,10 +1,11 @@
 import { faClock, faStar } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Link from 'next/link'
 import React from 'react'
 
 export default function BookDisplay({data = {} as Book}) {
   return (
-    <a className="for-you__recommended--books-link">
+    <Link href={`/book/${data.id}`} className="for-you__recommended--books-link">
     {/* AUDIO */}
     <figure className="book__image--wrapper" style={{marginBottom:"8px"}}>
         <img src={data.imageLink} alt="" className="book__image" />
@@ -26,6 +27,6 @@ export default function BookDisplay({data = {} as Book}) {
             <div className="recommended__book--details-text">{data.averageRating}</div>
         </div>
     </div>
-    </a>
+    </Link>
   )
 }

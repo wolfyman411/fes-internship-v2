@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHome, faBookmark, faPenToSquare, faQuestionCircle } from '@fortawesome/free-regular-svg-icons'
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch'
 import { faGear, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import Link from 'next/link'
 
 export default function Sidebar() {
   return (
@@ -15,20 +16,20 @@ export default function Sidebar() {
         </div>
         <div className="sidebar__wrapper">
           <div className="sidebar__top">
-            <a href="" className="sidebar__link--wrapper">
+            <Link href="/for-you" className="sidebar__link--wrapper">
               <div className="sidebar__link--line"></div>
               <div className="sidebar__icon--wrapper">
                 <FontAwesomeIcon icon={faHome}/>
               </div>
               <div className="sidebar__link--text">For you</div>
-            </a>
-            <a href="" className="sidebar__link--wrapper">
+            </Link>
+            <Link href="/library" className="sidebar__link--wrapper">
               <div className="sidebar__link--line"></div>
               <div className="sidebar__icon--wrapper">
                 <FontAwesomeIcon icon={faBookmark}/>
               </div>
               <div className="sidebar__link--text">My Library</div>
-            </a>
+            </Link>
             <div className="sidebar__link--wrapper">
               <div className="sidebar__link--line"></div>
               <div className="sidebar__icon--wrapper">

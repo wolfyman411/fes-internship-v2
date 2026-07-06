@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
-import BooksDisplay from './components/BooksDisplay'
+import BooksDisplay from '../components/BooksDisplay'
 
 export default function page() {
 
