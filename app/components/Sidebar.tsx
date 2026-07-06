@@ -46,13 +46,13 @@ export default function Sidebar() {
             </div>
           </div>
           <div className="sidebar__bottom">
-            <a href="" className="sidebar__link--wrapper">
+            <Link href="/settings" className="sidebar__link--wrapper">
               <div className="sidebar__link--line"></div>
               <div className="sidebar__icon--wrapper">
                 <FontAwesomeIcon icon={faGear}/>
               </div>
               <div className="sidebar__link--text">Settings</div>
-            </a>
+            </Link>
             <div className="sidebar__link--wrapper">
               <div className="sidebar__link--line"></div>
               <div className="sidebar__icon--wrapper">
