@@ -1,3 +1,5 @@
+"use client"
+
 import Image from 'next/image'
 import React from 'react'
 import logo from "../assets/logo.png"
@@ -6,9 +8,14 @@ import { faHome, faBookmark, faPenToSquare, faQuestionCircle } from '@fortawesom
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch'
 import { faGear, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link'
+import { useBoundStore } from '../zustand/zustand'
 
 export default function Sidebar() {
+
+  const user:User = useBoundStore((state:any) => state.user)
+
   return (
+    (user.email &&
     <>
       <div className='sidebar sidebar--closed'>
         <div className="sidebar__logo">
@@ -72,5 +79,6 @@ export default function Sidebar() {
       </div>
       <div className="sidebar__overlay sidebar__overlay--hidden"></div>
     </>
+    )
   )
 }

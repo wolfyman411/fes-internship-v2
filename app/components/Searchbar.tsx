@@ -1,9 +1,16 @@
+"use client"
+
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
+import { useBoundStore } from '../zustand/zustand'
 
 export default function Searchbar() {
+
+  const user:User = useBoundStore((state:any) => state.user)
+  
   return (
+    (user.email &&
     <div className='search__background'>
       <div className="search__wrapper">
         <div className="figure">
@@ -23,5 +30,6 @@ export default function Searchbar() {
         </div>
       </div>
     </div>
+    )
   )
 }

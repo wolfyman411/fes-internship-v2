@@ -50,25 +50,25 @@ export default function page() {
   }
 
   return (
-    <>
-    <div className="row">
-      <div className="container">
-        <div className="for-you__wrapper">
-          <div className="for-you__title">Selected just for you</div>
-          {loaded ? selectedBookHTML() : null}
-          <div>
-            <div className="for-you__title">Recommended For You</div>
-            <div className="for-you__sub--title">We think you'll like these</div>
-            <BooksDisplay apiCall={"https://us-central1-summaristt.cloudfunctions.net/getBooks?status=recommended"}/>
-          </div>
-          <div>
-            <div className="for-you__title">Suggested Books</div>
-            <div className="for-you__sub--title">Browse those books</div>
-            <BooksDisplay apiCall={"https://us-central1-summaristt.cloudfunctions.net/getBooks?status=suggested"}/>
+    <div className='wrapper'>
+      <div className="row">
+        <div className="container">
+          <div className="for-you__wrapper">
+            <div className="for-you__title">Selected just for you</div>
+            {loaded ? selectedBookHTML() : null}
+            <div>
+              <div className="for-you__title">Recommended For You</div>
+              <div className="for-you__sub--title">We think you'll like these</div>
+              <BooksDisplay apiCall={"https://us-central1-summaristt.cloudfunctions.net/getBooks?status=recommended"}/>
+            </div>
+            <div>
+              <div className="for-you__title">Suggested Books</div>
+              <div className="for-you__sub--title">Browse those books</div>
+              <BooksDisplay apiCall={"https://us-central1-summaristt.cloudfunctions.net/getBooks?status=suggested"}/>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    </>
   )
 }

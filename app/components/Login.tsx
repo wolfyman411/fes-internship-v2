@@ -7,17 +7,58 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMultiply, faUser } from '@fortawesome/free-solid-svg-icons'
 import { useBoundStore } from '../zustand/zustand'
 import Link from 'next/link'
+import { db } from '../firestore/firebase'
+import { getDoc, doc, collection, getDocs, where, query } from 'firebase/firestore'
+import { useRouter } from 'next/navigation'
 
 export default function Login() {
 
   const openAuth = useBoundStore((state:any) => state.loginOpen)
   const toggleLogin = useBoundStore((state:any) => state.toggleLogin)
+  const setUser = useBoundStore((state:any) => state.setUser)
+  const router = useRouter()
 
   const [isLogin,setIsLogin] = useState(true)
+  const [formEmail,setFormEmail] = useState("")
+  const [formPassword,setFormPassword] = useState("")
+  const [authError,setAuthError] = useState("")
 
   useEffect(() => {
     setIsLogin(true)
+    setAuthError("")
   },[openAuth])
+
+  async function logInUser() {
+
+    // Check information
+    const usersRef = collection(db, "users")
+    const q = query(usersRef, where("email","==",formEmail))
+    const snapshot = await getDocs(q)
+
+    // Check email
+    if (!snapshot.empty) {
+        
+        const userRef:User = {
+            id:snapshot.docs[0].id,
+            password:snapshot.docs[0].data().password,
+            email:snapshot.docs[0].data().email,
+        }
+        // Check password
+        if (userRef.password === formPassword) {
+            setUser(userRef)
+            toggleLogin()
+            router.push("/for-you")
+        }
+        else {
+            setAuthError("Incorrect Password")
+        }
+    }
+
+    // Else throw an error
+    else {
+        setAuthError("User doesn't exist")
+    }
+  }
 
   function loginHTML() {
     return (
@@ -27,6 +68,7 @@ export default function Login() {
                 <div className="auth">
                     <div className="auth__content">
                         <div className="auth__title">Log in to Summarist</div>
+                        <div className="auth__error">{authError}</div>
                         <button className="btn guest__btn--wrapper">
                             <figure className="google__icon--mask guest__icon--mask">
                                 <FontAwesomeIcon icon={faUser}/>
@@ -45,15 +87,13 @@ export default function Login() {
                         <div className="auth__separator">
                             <div className="auth__separator--text">or</div>
                         </div>
-                        <form action="/" className="auth__main--form">
-                            <input type="text" className="auth__main--input" placeholder='Email Address' autoComplete='current-email'/>
-                            <input type="password" className="auth__main--input" placeholder='Password' autoComplete='current-password'/>
-                            <Link href={"/for-you"}>
-                                <button className="btn"  onClick={() => {toggleLogin()}}>
-                                    <span>Login</span>
-                                </button>
-                            </Link>
-                        </form>
+                        <div className="auth__main--form">
+                            <input type="text" className="auth__main--input" placeholder='Email Address' autoComplete='current-email' onChange={(e) => setFormEmail(e.target.value)}/>
+                            <input type="password" className="auth__main--input" placeholder='Password' autoComplete='current-password' onChange={(e) => setFormPassword(e.target.value)}/>
+                            <button className="btn"  onClick={() => {logInUser()}}>
+                                <span>Login</span>
+                            </button>
+                        </div>
                     </div>
                     <div className="auth__forgot--password">Forgot your password?</div>
                     <button className="auth__switch--btn" onClick={() => {setIsLogin(false)}}>Don't have an account?</button>
@@ -74,6 +114,7 @@ export default function Login() {
                 <div className="auth">
                     <div className="auth__content">
                         <div className="auth__title">Sign up to Summarist</div>
+                        <div className="auth__error">{authError}</div>
                         <button className="btn google__btn--wrapper">
                             <figure className="google__icon--mask">
                                 <Image src={googleImg} alt="google"/>

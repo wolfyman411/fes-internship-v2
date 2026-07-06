@@ -26,8 +26,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
 
-  const isHome = false //Hide searchbar and sidebar
-
   return (
     <html
       lang="en"
@@ -35,15 +33,11 @@ export default function RootLayout({
     >
       <body>
         <Login />
-        {isHome ? (
-          children
-        ) : (
-          <div className="wrapper">
-            <Searchbar />
-            <Sidebar />
-            {children}
-          </div>
-        )}
+        <div>
+          <Searchbar />
+          <Sidebar />
+          {children}
+        </div>
       </body>
     </html>
   );
