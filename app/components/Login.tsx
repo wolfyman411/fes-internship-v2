@@ -7,9 +7,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMultiply, faUser } from '@fortawesome/free-solid-svg-icons'
 import { useBoundStore } from '../zustand/zustand'
 import Link from 'next/link'
-import { db } from '../firestore/firebase'
+import { auth, db } from '../firestore/firebase'
 import { getDoc, doc, collection, getDocs, where, query, addDoc } from 'firebase/firestore'
 import { useRouter } from 'next/navigation'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 
 export default function Login() {
 
@@ -49,6 +50,9 @@ export default function Login() {
         // Check password
         if (userRef.password === formPassword) {
             setUser(userRef)
+
+            await signInWithEmailAndPassword(auth, userRef.email,userRef.password)
+
             toggleLogin()
             router.push("/for-you")
         }
@@ -98,6 +102,7 @@ export default function Login() {
             setUser(userRef)
 
             await addDoc(collection(db,"users"),userRef)
+            await signInWithEmailAndPassword(auth, userRef.email,userRef.password)
 
             toggleLogin()
             router.push("/for-you")

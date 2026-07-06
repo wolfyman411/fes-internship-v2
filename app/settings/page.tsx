@@ -1,6 +1,12 @@
+"use client"
+
 import React from 'react'
+import { useBoundStore } from '../zustand/zustand'
 
 export default function page() {
+
+  const user = useBoundStore((state:any) => state.user)
+
   return (
     <div className="container">
         <div className="row">
@@ -11,7 +17,7 @@ export default function page() {
             </div>
             <div className="setting__content">
                 <div className="settings__sub--title">Email</div>
-                <div className="settings__text">gmail.com</div>
+                <div className="settings__text">{user.email}</div>
             </div>
         </div>
     </div>
