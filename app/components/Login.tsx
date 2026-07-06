@@ -8,7 +8,7 @@ import { faMultiply, faUser } from '@fortawesome/free-solid-svg-icons'
 import { useBoundStore } from '../zustand/zustand'
 import Link from 'next/link'
 import { db } from '../firestore/firebase'
-import { getDoc, doc, collection, getDocs, where, query } from 'firebase/firestore'
+import { getDoc, doc, collection, getDocs, where, query, addDoc } from 'firebase/firestore'
 import { useRouter } from 'next/navigation'
 
 export default function Login() {
@@ -28,6 +28,10 @@ export default function Login() {
     setAuthError("")
   },[openAuth])
 
+  useEffect(() => {
+    setAuthError("")
+  },[isLogin])
+
   async function logInUser() {
 
     // Check information
@@ -39,7 +43,6 @@ export default function Login() {
     if (!snapshot.empty) {
         
         const userRef:User = {
-            id:snapshot.docs[0].id,
             password:snapshot.docs[0].data().password,
             email:snapshot.docs[0].data().email,
         }
@@ -50,14 +53,57 @@ export default function Login() {
             router.push("/for-you")
         }
         else {
-            setAuthError("Incorrect Password")
+            setAuthError("Incorrect Password.")
         }
     }
 
     // Else throw an error
     else {
-        setAuthError("User doesn't exist")
+        setAuthError("That user doesn't exist.")
     }
+  }
+
+  async function signUpUser() {
+
+    // Check information
+    const usersRef = collection(db, "users")
+    const q = query(usersRef, where("email","==",formEmail))
+    const snapshot = await getDocs(q)
+
+    // Throw error if email already exists
+    if (!snapshot.empty) {
+        setAuthError("A user already has that email.")
+    }
+
+    // Else throw an error
+    else {
+        // Email doesn't work
+        const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+        if (!emailRegex.test(formEmail)) {
+            setAuthError("Invalid email address.")
+        }
+
+        // Password isn't 6 or more
+        else if (formPassword.length < 6) {
+            setAuthError("Password length must be 6 or more characters.")
+        }
+
+        // Success
+        else {
+            const userRef:User = {
+                password:formPassword,
+                email:formEmail,
+            }
+            
+            setUser(userRef)
+
+            await addDoc(collection(db,"users"),userRef)
+
+            toggleLogin()
+            router.push("/for-you")
+        }
+    }
+
   }
 
   function loginHTML() {
@@ -124,13 +170,13 @@ export default function Login() {
                         <div className="auth__separator">
                             <div className="auth__separator--text">or</div>
                         </div>
-                        <form action="/" className="auth__main--form">
-                            <input type="text" className="auth__main--input" placeholder='Email Address' autoComplete='current-email'/>
-                            <input type="password" className="auth__main--input" placeholder='Password' autoComplete='current-password'/>
-                            <button className="btn">
+                        <div className="auth__main--form">
+                            <input type="text" className="auth__main--input" placeholder='Email Address' autoComplete='current-email' onChange={(e) => setFormEmail(e.target.value)}/>
+                            <input type="password" className="auth__main--input" placeholder='Password' autoComplete='current-password' onChange={(e) => setFormPassword(e.target.value)}/>
+                            <button className="btn" onClick={() => signUpUser()}>
                                 <span>Sign up</span>
                             </button>
-                        </form>
+                        </div>
                     </div>
                     <button className="auth__switch--btn" onClick={() => {setIsLogin(true)}}>Already have an account?</button>
                     <div className="auth__close--btn" onClick={() => {toggleLogin()}}>
