@@ -92,18 +92,22 @@ export default function page() {
                     </div>
                 </div>
                 <div className="inner-book__read--btn-wrapper">
-                    <button className="inner-book__read--btn">
-                        <div className="inner-book__read--icon">
-                            <FontAwesomeIcon icon={faBookOpen}/>
-                        </div>
-                        <Link href={`/player/${id}`} className="inner-book__read--text">Read</Link>
-                    </button>
-                    <button className="inner-book__read--btn">
-                        <div className="inner-book__read--icon">
-                            <FontAwesomeIcon icon={faMicrophone}/>
-                        </div>
-                        <Link href={`/player/${id}`} className="inner-book__read--text">Listen</Link>
-                    </button>
+                    <Link href={`/player/${id}`}>
+                        <button className="inner-book__read--btn">
+                            <div className="inner-book__read--icon">
+                                <FontAwesomeIcon icon={faBookOpen}/>
+                            </div>
+                            <div className="inner-book__read--text">Read</div>
+                        </button>
+                    </Link>
+                    <Link href={`/player/${id}`}>
+                        <button className="inner-book__read--btn">
+                            <div className="inner-book__read--icon">
+                                <FontAwesomeIcon icon={faMicrophone}/>
+                            </div>
+                            <div className="inner-book__read--text">Listen</div>
+                        </button>
+                    </Link>
                 </div>
                 <div className="inner-book__bookmark" onClick={toggleBook} key={buttonPressed}>
                     {user.savedBooks && user.savedBooks.includes(book.id) ? (

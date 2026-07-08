@@ -22,7 +22,7 @@ export default function BooksDisplay({apiCall = "", dataArray=[] as string[]}) {
     const {data}:any = await axios.get(apiCall)
 
     // Add song duration to the book
-    const bookDurations = await Promise.all(
+    await Promise.all(
       data.map(async (e:Book) => {
         e.bookDuration = (await getAudioDuration(e.audioLink))
       })
@@ -43,9 +43,12 @@ export default function BooksDisplay({apiCall = "", dataArray=[] as string[]}) {
 
     // Add song duration to the book
     const responseData = responses.map(response => response.data)
-    responseData.map((e:Book) => {
-      e.bookDuration = "1:01"
-    })
+
+    await Promise.all(
+      responseData.map(async (e:Book) => {
+        e.bookDuration = (await getAudioDuration(e.audioLink))
+      })
+    )
 
     setBooksData(responseData)
     setLoaded(true)

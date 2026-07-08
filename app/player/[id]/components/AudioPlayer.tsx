@@ -1,8 +1,24 @@
+"use client"
+
 import { faPlay, faRotateLeft, faRotateRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 export default function AudioPlayer({book = {} as Book}) {
+
+  const [audio,setAudio] = useState(() => new Audio())
+
+  useEffect(() => {
+    getAudio()
+  },[])
+
+  async function getAudio() {
+    const audioData = new Audio()
+    audioData.src = book.audioLink
+    audioData.preload = "metadata"
+    setAudio(audioData)
+  }
+
   return (
     <div className="audio__wrapper">
         <audio src={book.audioLink}/>
@@ -33,7 +49,7 @@ export default function AudioPlayer({book = {} as Book}) {
         <div className="audio__progress--wrapper">
             <div className="audio__time">00:00</div>
             <input type="range" className="audio__progress--bar" value={0} max={100} style={{background:"linear-gradient(to right, rgb(43, 217, 124) 0%, rgb(109, 120, 125) 0%)"}}/>
-            <div className="audio__time">00:00</div>
+            <div className="audio__time">{`${(Math.floor(audio.duration/60)).toString().padStart(2,"0")}:${(Math.floor(audio.duration%60)).toString().padStart(2,"0")}`}</div>
         </div>
     </div>
   )
