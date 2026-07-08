@@ -23,7 +23,7 @@ export default function page() {
         <div>
           <div className="for-you__title">Finished</div>
           <div className="for-you__sub--title">0 items</div>
-          <BooksDisplay dataArray={user.finishedBooks}/>
+          <BooksDisplay dataArray={user.savedBooks}/>
         </div>
       </div>
     </div>

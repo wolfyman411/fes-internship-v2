@@ -38,10 +38,12 @@ export default function ClientPage({children = <></>}) {
   }
 
   return (
-    <div>
-        <Searchbar />
-        <Sidebar />
-        {children}
-    </div>
+    <>
+    <Sidebar />
+      <div className='wrapper'>
+          <Searchbar />
+          {children}
+      </div>
+    </>
   )
 }

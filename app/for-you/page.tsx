@@ -50,7 +50,7 @@ export default function page() {
   }
 
   return (
-    <div className='wrapper'>
+    <div>
       <div className="row">
         <div className="container">
           <div className="for-you__wrapper">
