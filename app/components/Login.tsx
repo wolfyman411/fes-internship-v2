@@ -8,9 +8,9 @@ import { faMultiply, faUser } from '@fortawesome/free-solid-svg-icons'
 import { useBoundStore } from '../zustand/zustand'
 import Link from 'next/link'
 import { auth, db } from '../firestore/firebase'
-import { getDoc, doc, collection, getDocs, where, query, addDoc } from 'firebase/firestore'
+import { getDoc, doc, collection, getDocs, where, query, addDoc, setDoc } from 'firebase/firestore'
 import { useRouter } from 'next/navigation'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 
 export default function Login() {
 
@@ -46,6 +46,8 @@ export default function Login() {
         const userRef:User = {
             password:snapshot.docs[0].data().password,
             email:snapshot.docs[0].data().email,
+            savedBooks:snapshot.docs[0].data().savedBooks,
+            finishedBooks:snapshot.docs[0].data().finishedBooks,
         }
         // Check password
         if (userRef.password === formPassword) {
@@ -97,13 +99,17 @@ export default function Login() {
             const userRef:User = {
                 password:formPassword,
                 email:formEmail,
+                savedBooks:[],
+                finishedBooks:[]
             }
-            
+
+            await createUserWithEmailAndPassword(auth, userRef.email,userRef.password)
+            if (auth.currentUser) {
+                const userDocRef = doc(db, "users", auth.currentUser.uid)
+                await setDoc(userDocRef, userRef)
+            }
+
             setUser(userRef)
-
-            await addDoc(collection(db,"users"),userRef)
-            await signInWithEmailAndPassword(auth, userRef.email,userRef.password)
-
             toggleLogin()
             router.push("/for-you")
         }

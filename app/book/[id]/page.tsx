@@ -9,12 +9,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import axios from 'axios'
+import { useBoundStore } from '@/app/zustand/zustand'
+import { doc, setDoc } from 'firebase/firestore'
+import { auth, db } from '@/app/firestore/firebase'
 
 export default function page() {
 
   const {id} = useParams()
   const [book,setBook] = useState<Book>({} as Book)
   const [loaded,setLoaded] = useState(false)
+  const [buttonPressed,setButtonPressed] = useState(0) // Update the page so that the add to library buttons actually changes
+
+  const user:User = useBoundStore((state:any) => state.user)
 
   useEffect(() => {
     getData()
@@ -25,6 +31,28 @@ export default function page() {
     const {data}:any = await axios.get(`https://us-central1-summaristt.cloudfunctions.net/getBook?id=${id}`)
     setBook(data)
     setLoaded(true)
+  }
+
+  function toggleBook() {
+
+    if (!auth.currentUser) {
+        return
+    }
+
+    setButtonPressed(buttonPressed + 1)
+
+    const index:number|undefined = user.savedBooks.findIndex((e) => e === book.id)
+    if (index !== -1) { // Remove from array
+        user.savedBooks.splice(index,1)
+    }
+    else { // Add to array
+        user.savedBooks.push(book.id)
+    }
+
+    // Update database
+    setDoc(doc(db,"users",auth.currentUser?.uid), {
+        savedBooks: user.savedBooks
+    }, {merge:true})
   }
 
   function bookHTML() {
@@ -76,11 +104,22 @@ export default function page() {
                         <div className="inner-book__read--text">Listen</div>
                     </button>
                 </div>
-                <div className="inner-book__bookmark">
-                    <div className="inner-book__bookmark--icon">
-                        <FontAwesomeIcon icon={faBookmark}/>
-                    </div>
-                    <div className="inner-book__bookmark-text">Add title to My Library</div>
+                <div className="inner-book__bookmark" onClick={toggleBook} key={buttonPressed}>
+                    {user.savedBooks && user.savedBooks.includes(book.id) ? (
+                        <>
+                            <div className="inner-book__bookmark--icon">
+                                <FontAwesomeIcon icon={faBookmarkFilled}/>
+                            </div>
+                            <div className="inner-book__bookmark-text">Saved in My Library</div>
+                        </>
+                    ) : (
+                        <>
+                            <div className="inner-book__bookmark--icon">
+                                <FontAwesomeIcon icon={faBookmark}/>
+                            </div>
+                            <div className="inner-book__bookmark-text">Add title to My Library</div>
+                        </>
+                    )}
                 </div>
                 <div className="inner-book__secondary--title">What's it about?</div>
                 <div className="inner-book__tags--wrapper">

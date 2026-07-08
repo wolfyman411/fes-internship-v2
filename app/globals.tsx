@@ -20,5 +20,7 @@
 
   interface User {
     email:string,
-    password:string
+    password:string,
+    savedBooks:string[],
+    finishedBooks:string[]
 }

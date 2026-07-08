@@ -9,10 +9,18 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch'
 import { faGear, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link'
 import { useBoundStore } from '../zustand/zustand'
+import { signOut } from 'firebase/auth'
+import { auth } from '../firestore/firebase'
 
 export default function Sidebar() {
 
   const user:User = useBoundStore((state:any) => state.user)
+  const setUser = useBoundStore((state:any) => state.setUser)
+
+  function logout() {
+    signOut(auth)
+    setUser(null)
+  }
 
   return (
     (user.email &&
@@ -72,7 +80,7 @@ export default function Sidebar() {
               <div className="sidebar__icon--wrapper">
                 <FontAwesomeIcon icon={faRightFromBracket}/>
               </div>
-              <div className="sidebar__link--text">Logout</div>
+              <div className="sidebar__link--text" onClick={logout}>Logout</div>
             </div>
           </div>
         </div>
