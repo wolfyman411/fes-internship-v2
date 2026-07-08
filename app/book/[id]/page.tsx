@@ -12,6 +12,7 @@ import axios from 'axios'
 import { useBoundStore } from '@/app/zustand/zustand'
 import { doc, setDoc } from 'firebase/firestore'
 import { auth, db } from '@/app/firestore/firebase'
+import Link from 'next/link'
 
 export default function page() {
 
@@ -95,13 +96,13 @@ export default function page() {
                         <div className="inner-book__read--icon">
                             <FontAwesomeIcon icon={faBookOpen}/>
                         </div>
-                        <div className="inner-book__read--text">Read</div>
+                        <Link href={`/player/${id}`} className="inner-book__read--text">Read</Link>
                     </button>
                     <button className="inner-book__read--btn">
                         <div className="inner-book__read--icon">
                             <FontAwesomeIcon icon={faMicrophone}/>
                         </div>
-                        <div className="inner-book__read--text">Listen</div>
+                        <Link href={`/player/${id}`} className="inner-book__read--text">Listen</Link>
                     </button>
                 </div>
                 <div className="inner-book__bookmark" onClick={toggleBook} key={buttonPressed}>

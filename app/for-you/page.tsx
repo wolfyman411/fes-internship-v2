@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
 import BooksDisplay from '../components/BooksDisplay'
+import Link from 'next/link'
 
 export default function page() {
 
@@ -26,7 +27,7 @@ export default function page() {
     return(
       <>
         {/* AUDIO */}
-        <a className="selected__book">
+        <Link className="selected__book" href={`/book/${selectedBook.id}`}>
           <div className="selected__book--sub-title">{selectedBook.subTitle}</div>
           <div className="selected__book--line"></div>
           <div className="selected__book--content">
@@ -44,7 +45,7 @@ export default function page() {
               </div>
             </div>
           </div>
-        </a>
+        </Link>
       </>
     )
   }
