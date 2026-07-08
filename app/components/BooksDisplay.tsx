@@ -20,6 +20,14 @@ export default function BooksDisplay({apiCall = "", dataArray=[] as string[]}) {
   async function getData() {
     setLoaded(false)
     const {data}:any = await axios.get(apiCall)
+
+    // Add song duration to the book
+    const bookDurations = await Promise.all(
+      data.map(async (e:Book) => {
+        e.bookDuration = (await getAudioDuration(e.audioLink))
+      })
+    )
+
     setBooksData(data)
     setLoaded(true)
   }
@@ -32,9 +40,32 @@ export default function BooksDisplay({apiCall = "", dataArray=[] as string[]}) {
     }
 
     const responses = await Promise.all(tempData)
+
+    // Add song duration to the book
     const responseData = responses.map(response => response.data)
+    responseData.map((e:Book) => {
+      e.bookDuration = "1:01"
+    })
+
     setBooksData(responseData)
     setLoaded(true)
+  }
+
+  function getAudioDuration(url:string): Promise<string> {
+    return new Promise((resolve) => {
+      const audio = new Audio()
+      audio.src = url
+      audio.preload = "metadata"
+
+      const loadedMetadata = () => {
+        const minutes = Math.floor(audio.duration/60)
+        const seconds = Math.floor(audio.duration%60)
+        audio.removeEventListener('loadedmetadata', loadedMetadata);
+        resolve(`${minutes.toString().padStart(2,"0")}:${seconds.toString().padStart(2,"0")}`)
+      }
+
+      audio.addEventListener('loadedmetadata', loadedMetadata);
+    })
   }
 
 

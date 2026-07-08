@@ -15,7 +15,8 @@
     summary:string,
     tags:[string],
     bookDescription:string,
-    authorDescription:string
+    authorDescription:string,
+    bookDuration:string
   }
 
   interface User {

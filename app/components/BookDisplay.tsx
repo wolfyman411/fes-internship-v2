@@ -1,9 +1,12 @@
+"use client"
+
 import { faClock, faStar } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
 import React from 'react'
 
 export default function BookDisplay({data = {} as Book}) {
+
   return (
     <Link href={`/book/${data.id}`} className="for-you__recommended--books-link">
     {/* AUDIO */}
@@ -18,7 +21,7 @@ export default function BookDisplay({data = {} as Book}) {
             <div className="recommended__book--details-icon">
                 <FontAwesomeIcon icon={faClock}/>
             </div>
-            <div className="recommended__book--details-text">0:00</div>
+            <div className="recommended__book--details-text">{data.bookDuration}</div>
         </div>
         <div className="recommended__book--details">
             <div className="recommended__book--details-icon">
