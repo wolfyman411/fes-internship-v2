@@ -3,6 +3,7 @@
 import axios from 'axios'
 import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import AudioPlayer from './components/AudioPlayer'
 
 export default function page() {
 
@@ -32,6 +33,7 @@ export default function page() {
             {book.summary}
         </div>
       </div>
+      <AudioPlayer book={book}/>
     </div>
     )
   )
