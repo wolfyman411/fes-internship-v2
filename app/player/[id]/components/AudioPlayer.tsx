@@ -1,27 +1,50 @@
 "use client"
 
-import { faPlay, faRotateLeft, faRotateRight } from '@fortawesome/free-solid-svg-icons'
+import { faPause, faPlay, faRotateLeft, faRotateRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useState } from 'react'
 
 export default function AudioPlayer({book = {} as Book}) {
 
   const [audio,setAudio] = useState(() => new Audio())
+  const [audioPlaying,setAudioPlaying] = useState(true)
+  const [loaded,setLoaded] = useState(false)
 
   useEffect(() => {
     getAudio()
   },[])
 
   async function getAudio() {
+    setLoaded(false)
     const audioData = new Audio()
     audioData.src = book.audioLink
     audioData.preload = "metadata"
+
+    await new Promise((resolve) => {
+        audioData.addEventListener('loadedmetadata', resolve)
+    })
+
     setAudio(audioData)
+    setLoaded(true)
+  }
+
+  function toggleAudio() {
+    const playElement:HTMLAudioElement|null = document.querySelector(".book__audio")
+
+    setAudioPlaying(!audioPlaying)
+
+    if (audioPlaying) {
+        playElement?.play()
+    }
+    else {
+        playElement?.pause()
+    }
   }
 
   return (
+    (loaded &&
     <div className="audio__wrapper">
-        <audio src={book.audioLink}/>
+        <audio src={book.audioLink} className='book__audio'/>
         <div className="audio__track--wrapper">
             <figure className="audio__track--image-mask">
                 <figure className="book__image--wrapper" style={{height:"48px", width:"48px", minWidth:"48px"}}>
@@ -38,8 +61,12 @@ export default function AudioPlayer({book = {} as Book}) {
                 <button className="audio__controls--btn">
                     <FontAwesomeIcon icon={faRotateLeft}/>
                 </button>
-                <button className="audio__comntrols--btn audio__controls--btn-play">
-                    <FontAwesomeIcon icon={faPlay}/>
+                <button className="audio__comntrols--btn audio__controls--btn-play" onClick={toggleAudio}>
+                    {audioPlaying ? (
+                        <FontAwesomeIcon icon={faPlay}/>
+                    ) : (
+                        <FontAwesomeIcon icon={faPause}/>
+                    )}
                 </button>
                 <button className="audio__controls--btn">
                     <FontAwesomeIcon icon={faRotateRight}/>
@@ -48,9 +75,10 @@ export default function AudioPlayer({book = {} as Book}) {
         </div>
         <div className="audio__progress--wrapper">
             <div className="audio__time">00:00</div>
-            <input type="range" className="audio__progress--bar" value={0} max={100} style={{background:"linear-gradient(to right, rgb(43, 217, 124) 0%, rgb(109, 120, 125) 0%)"}}/>
+            <input type="range" className="audio__progress--bar" defaultValue={0} max={100} style={{background:"linear-gradient(to right, rgb(43, 217, 124) 0%, rgb(109, 120, 125) 0%)"}}/>
             <div className="audio__time">{`${(Math.floor(audio.duration/60)).toString().padStart(2,"0")}:${(Math.floor(audio.duration%60)).toString().padStart(2,"0")}`}</div>
         </div>
     </div>
+    )
   )
 }
