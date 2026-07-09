@@ -7,7 +7,7 @@ import { faBookmark } from '@fortawesome/free-regular-svg-icons/faBookmark'
 import { faMicrophone } from '@fortawesome/free-solid-svg-icons/faMicrophone'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import axios from 'axios'
 import { useBoundStore } from '@/app/zustand/zustand'
 import { doc, setDoc } from 'firebase/firestore'
@@ -22,6 +22,8 @@ export default function page() {
   const [buttonPressed,setButtonPressed] = useState(0) // Update the page so that the add to library buttons actually changes
 
   const user:User = useBoundStore((state:any) => state.user)
+  const toggleLogin = useBoundStore((state:any) => state.toggleLogin)
+  const router = useRouter()
 
   useEffect(() => {
     getData()
@@ -35,10 +37,6 @@ export default function page() {
   }
 
   function toggleBook() {
-
-    if (!auth.currentUser) {
-        return
-    }
 
     setButtonPressed(buttonPressed + 1)
 
@@ -92,25 +90,25 @@ export default function page() {
                     </div>
                 </div>
                 <div className="inner-book__read--btn-wrapper">
-                    <Link href={`/player/${id}`}>
+                    <div onClick={() => {user ? router.push(`/player/${id}`) : toggleLogin()}}>
                         <button className="inner-book__read--btn">
                             <div className="inner-book__read--icon">
                                 <FontAwesomeIcon icon={faBookOpen}/>
                             </div>
                             <div className="inner-book__read--text">Read</div>
                         </button>
-                    </Link>
-                    <Link href={`/player/${id}`}>
+                    </div>
+                    <div onClick={() => {user ? router.push(`/player/${id}`) : toggleLogin()}}>
                         <button className="inner-book__read--btn">
                             <div className="inner-book__read--icon">
                                 <FontAwesomeIcon icon={faMicrophone}/>
                             </div>
                             <div className="inner-book__read--text">Listen</div>
                         </button>
-                    </Link>
+                    </div>
                 </div>
-                <div className="inner-book__bookmark" onClick={toggleBook} key={buttonPressed}>
-                    {user.savedBooks && user.savedBooks.includes(book.id) ? (
+                <div className="inner-book__bookmark" onClick={() => {user ? toggleBook() : toggleLogin()}} key={buttonPressed}>
+                    {user && user.savedBooks && user.savedBooks.includes(book.id) ? (
                         <>
                             <div className="inner-book__bookmark--icon">
                                 <FontAwesomeIcon icon={faBookmarkFilled}/>

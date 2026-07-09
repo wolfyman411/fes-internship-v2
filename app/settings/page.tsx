@@ -2,13 +2,11 @@
 
 import React from 'react'
 import { useBoundStore } from '../zustand/zustand'
-import Image from "next/image";
-import logo from '../assets/login.png'
+import LoginBlocker from '../components/LoginBlocker';
 
 export default function page() {
 
   const user = useBoundStore((state:any) => state.user)
-  const toggleLogin = useBoundStore((state:any) => state.toggleLogin)
 
   return (
     <div className="container">
@@ -26,11 +24,7 @@ export default function page() {
                     </div>
                 </>
             ) : (
-                <div className="settings__login--wrapper">
-                    <Image src={logo} alt="landing" />
-                    <div className="settings__login--text">Log in to your account to see your details.</div>
-                    <button className="btn settings__login--btn" onClick={() => {toggleLogin()}}>Login</button>
-                </div>
+                <LoginBlocker text={"Log in to your account to see your details."}/>
             )}
         </div>
     </div>

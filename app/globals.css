@@ -849,6 +849,21 @@ button:disabled {
     margin-bottom: 16px;
 }
 
+.book__pill {
+    background-color: rgb(3, 43, 65);
+    width: fit-content;
+    height: 18px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    color: rgb(255, 255, 255);
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    padding: 0px 8px;
+    border-radius: 20px;
+}
+
 /* LIBRARY */
 
 .finished__books--block-wrapper {

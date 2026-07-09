@@ -16,6 +16,7 @@ export default function AudioPlayer({book = {} as Book}) {
   const currentTime = useRef(0)
 
   const user:User = useBoundStore((state:any) => state.user)
+  const toggleLogin = useBoundStore((state:any) => state.toggleLogin)
 
   useEffect(() => {
     getAudio()
@@ -143,9 +144,9 @@ export default function AudioPlayer({book = {} as Book}) {
         <div className="audio__controls--wrapper">
             <div className="audio__controls">
                 <button className="audio__controls--btn">
-                    <FontAwesomeIcon icon={faRotateLeft} onClick={() => skipTime(-10)}/>
+                    <FontAwesomeIcon icon={faRotateLeft} onClick={() =>  {user ? skipTime(-10) : toggleLogin()}}/>
                 </button>
-                <button className="audio__comntrols--btn audio__controls--btn-play" onClick={toggleAudio}>
+                <button className="audio__comntrols--btn audio__controls--btn-play" onClick={() => {user ? toggleAudio() : toggleLogin()}}>
                     {audioPlaying ? (
                         <FontAwesomeIcon icon={faPlay}/>
                     ) : (
@@ -153,13 +154,13 @@ export default function AudioPlayer({book = {} as Book}) {
                     )}
                 </button>
                 <button className="audio__controls--btn">
-                    <FontAwesomeIcon icon={faRotateRight} onClick={() => skipTime(10)}/>
+                    <FontAwesomeIcon icon={faRotateRight} onClick={() => {user ? skipTime(10) : toggleLogin()}}/>
                 </button>
             </div>
         </div>
         <div className="audio__progress--wrapper">
             <div className="audio__time">{`${(Math.floor(currentTime.current/60)).toString().padStart(2,"0")}:${(Math.floor(currentTime.current%60)).toString().padStart(2,"0")}`}</div>
-            <input type="range" className="audio__progress--bar" value={(currentTime.current/audio.duration)*100} onChange={(e) => sliderMoved(e.target.value)} max={100} style={{background:`linear-gradient(to right, rgb(43, 217, 124) ${(currentTime.current/audio.duration)*100}%, rgb(109, 120, 125) 0%)`}}/>
+            <input type="range" className="audio__progress--bar" value={(currentTime.current/audio.duration)*100} onClick={() => {user ? null : toggleLogin()}} onChange={(e) => {user ? sliderMoved(e.target.value) : null}} max={100} style={{background:`linear-gradient(to right, rgb(43, 217, 124) ${(currentTime.current/audio.duration)*100}%, rgb(109, 120, 125) 0%)`}}/>
             <div className="audio__time">{`${(Math.floor(audio.duration/60)).toString().padStart(2,"0")}:${(Math.floor(audio.duration%60)).toString().padStart(2,"0")}`}</div>
         </div>
     </div>

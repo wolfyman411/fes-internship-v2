@@ -9,6 +9,7 @@ export default function BookDisplay({data = {} as Book}) {
 
   return (
     <Link href={`/book/${data.id}`} className="for-you__recommended--books-link">
+    {data.subscriptionRequired && <div className="book__pill book__pill--subscription-required">Premium</div>}
     <figure className="book__image--wrapper" style={{marginBottom:"8px"}}>
         <img src={data.imageLink} alt="" className="book__image" />
     </figure>

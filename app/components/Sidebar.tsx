@@ -11,12 +11,23 @@ import Link from 'next/link'
 import { useBoundStore } from '../zustand/zustand'
 import { signOut } from 'firebase/auth'
 import { auth } from '../firestore/firebase'
+import { usePathname } from 'next/navigation'
 
 export default function Sidebar() {
 
   const setUser = useBoundStore((state:any) => state.setUser)
   const user = useBoundStore((state:any) => state.user)
   const toggleLogin = useBoundStore((state:any) => state.toggleLogin)
+  const pathname = usePathname()
+
+  const navStyle = () => {
+    if (!pathname.startsWith("/player/")) {
+      return {}
+    }
+    else {
+      return {height:"calc(-140px + 100vh)"}
+    }
+  }
 
   function logout() {
     signOut(auth)
@@ -29,7 +40,7 @@ export default function Sidebar() {
         <div className="sidebar__logo">
           <Image src={logo} alt="logo"/>
         </div>
-        <div className="sidebar__wrapper">
+        <div className="sidebar__wrapper" style={navStyle()}>
           <div className="sidebar__top">
             <Link href="/for-you" className="sidebar__link--wrapper">
               <div className="sidebar__link--line"></div>
