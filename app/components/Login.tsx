@@ -186,44 +186,41 @@ export default function Login() {
 
   function loginHTML() {
     return (
-        <div className="wrapper wrapper__full">
-            <div className="sidebar__overlay sidebar__overlay--hidden"></div>
-            <div className="auth__wrapper">
-                <div className="auth">
-                    <div className="auth__content">
-                        <div className="auth__title">Log in to Summarist</div>
-                        <div className="auth__error">{authError}</div>
-                        <button className="btn guest__btn--wrapper" onClick={() => {signInGuest()}}>
-                            <figure className="google__icon--mask guest__icon--mask">
-                                <FontAwesomeIcon icon={faUser}/>
-                            </figure>
-                            <div>Login as a Guest</div>
-                        </button>
-                        <div className="auth__separator">
-                            <div className="auth__separator--text">or</div>
-                        </div>
-                        <button className="btn google__btn--wrapper" onClick={() => {logInGoogle()}}>
-                            <figure className="google__icon--mask">
-                                <Image src={googleImg} alt="google"/>
-                            </figure>
-                            <div>Login with Google</div>
-                        </button>
-                        <div className="auth__separator">
-                            <div className="auth__separator--text">or</div>
-                        </div>
-                        <div className="auth__main--form">
-                            <input type="text" className="auth__main--input" placeholder='Email Address' autoComplete='current-email' onChange={(e) => setFormEmail(e.target.value)}/>
-                            <input type="password" className="auth__main--input" placeholder='Password' autoComplete='current-password' onChange={(e) => setFormPassword(e.target.value)}/>
-                            <button className="btn"  onClick={() => {logInUser()}}>
-                                <span>Login</span>
-                            </button>
-                        </div>
+        <div className="auth__wrapper">
+            <div className="auth">
+                <div className="auth__content">
+                    <div className="auth__title">Log in to Summarist</div>
+                    <div className="auth__error">{authError}</div>
+                    <button className="btn guest__btn--wrapper" onClick={() => {signInGuest()}}>
+                        <figure className="google__icon--mask guest__icon--mask">
+                            <FontAwesomeIcon icon={faUser}/>
+                        </figure>
+                        <div>Login as a Guest</div>
+                    </button>
+                    <div className="auth__separator">
+                        <div className="auth__separator--text">or</div>
                     </div>
-                    <div className="auth__forgot--password">Forgot your password?</div>
-                    <button className="auth__switch--btn" onClick={() => {setIsLogin(false)}}>Don't have an account?</button>
-                    <div className="auth__close--btn" onClick={() => {toggleLogin()}}>
-                        <FontAwesomeIcon icon={faMultiply}/>
+                    <button className="btn google__btn--wrapper" onClick={() => {logInGoogle()}}>
+                        <figure className="google__icon--mask">
+                            <Image src={googleImg} alt="google"/>
+                        </figure>
+                        <div>Login with Google</div>
+                    </button>
+                    <div className="auth__separator">
+                        <div className="auth__separator--text">or</div>
                     </div>
+                    <div className="auth__main--form">
+                        <input type="text" className="auth__main--input" placeholder='Email Address' autoComplete='current-email' onChange={(e) => setFormEmail(e.target.value)}/>
+                        <input type="password" className="auth__main--input" placeholder='Password' autoComplete='current-password' onChange={(e) => setFormPassword(e.target.value)}/>
+                        <button className="btn"  onClick={() => {logInUser()}}>
+                            <span>Login</span>
+                        </button>
+                    </div>
+                </div>
+                <div className="auth__forgot--password">Forgot your password?</div>
+                <button className="auth__switch--btn" onClick={() => {setIsLogin(false)}}>Don't have an account?</button>
+                <div className="auth__close--btn" onClick={() => {toggleLogin()}}>
+                    <FontAwesomeIcon icon={faMultiply}/>
                 </div>
             </div>
         </div>
