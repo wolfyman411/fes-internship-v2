@@ -1655,6 +1655,12 @@ button:disabled {
     gap: 16px;
 }
 
+.plan__disclaimer {
+    font-size: 12px;
+    color: #6b757b;
+    text-align: center;
+}
+
 .accordion__card {
     border-bottom: 1px solid #ddd;
     margin-bottom: 8px;

@@ -10,6 +10,11 @@ import Footer from '../home/components/Footer'
 export default function page() {
 
   const [openedCard,setOpenedCard] = useState<HTMLElement>()
+  const [plusSelected,setPlusSelected] = useState(true)
+
+  useEffect(() => {
+    handlePlanCards()
+  },[plusSelected])
 
   function displayCard(element:HTMLElement) {
 
@@ -28,6 +33,7 @@ export default function page() {
   }
 
   function handleCard(element:HTMLElement) {
+
     const mainElement = element.closest(".accordion__card")
     const chevronElement = mainElement?.querySelector(".accordion__icon")
     const collapseElement = mainElement?.querySelector(".collapse")
@@ -41,6 +47,32 @@ export default function page() {
       chevronElement?.classList.add("accordion__icon--rotate")
       collapseElement?.classList.add("show")
     }
+  }
+
+  function handlePlanCards() {
+
+    const planElements = document.querySelectorAll(".plan__card")
+
+    // Reset Items
+    for (const item of planElements) {
+      const planCardCircle = item.querySelector(".plan__card--circle")
+
+      const planCardDot = planCardCircle?.querySelector(".plan__card--dot")
+      if (planCardDot) {
+        planCardCircle?.removeChild(planCardDot)
+      }
+      item.classList.remove("plan__card--active")
+    }
+
+    // First is plus, second is not
+    const refItem = plusSelected ? planElements[0] : planElements[1]
+
+    const planCardCircle = refItem.querySelector(".plan__card--circle")
+    const planCardDot = document.createElement("div")
+
+    planCardDot.className = "plan__card--dot"
+    planCardCircle?.appendChild(planCardDot)
+    refItem.classList.add("plan__card--active")
   }
 
   return (
@@ -63,7 +95,7 @@ export default function page() {
                   <FontAwesomeIcon icon={faFile}/>
                 </figure>
                 <div className="plan__features--text">
-                  <b>Key ideas in a few min</b> with many books to read
+                  <b>Key ideas in a few minutes</b> with many books to read
                 </div>
               </div>
               <div className="plan__features">
@@ -84,9 +116,8 @@ export default function page() {
               </div>
             </div>
             <div className="section__title">Choose the plan that fits you</div>
-            <div className="plan__card plan__card--active">
+            <div className="plan__card" onClick={() => setPlusSelected(true)}>
               <div className="plan__card--circle">
-                <div className="plan__card--dot"></div>
               </div>
               <div className="plan__card--content">
                 <div className="plan__card--title">Premium Plus Yearly</div>
@@ -97,7 +128,7 @@ export default function page() {
             <div className="plan__card--separator">
               <div className="plan__separator">or</div>
             </div>
-            <div className="plan__card">
+            <div className="plan__card" onClick={() => setPlusSelected(false)}>
               <div className="plan__card--circle">
               </div>
               <div className="plan__card--content">
@@ -109,10 +140,10 @@ export default function page() {
             <div className="plan__card--cta">
               <span className="btn--wrapper">
                 <button className="btn" style={{width:"300px"}}>
-                  <span>Start your free 7-day trial</span>
+                  <span>{plusSelected ? "Start your free 7-day trial" : "Start your first month"}</span>
                 </button>
               </span>
-              <div className="plan__disclaimer">Cancel your trial at any time before it ends, and you won't be charged.</div>
+              <div className="plan__disclaimer">{plusSelected ? "Cancel your trial at any time before it ends, and you won't be charged." : "30-day money back guarantee, no questions asked."}</div>
             </div>
             <div className="faq__wrapper">
               <div className="accordion__card">
