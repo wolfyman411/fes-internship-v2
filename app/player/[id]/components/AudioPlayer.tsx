@@ -55,7 +55,36 @@ export default function AudioPlayer({book = {} as Book}) {
   }
 
   function sliderMoved(value:string) {
-    currentTime.current = audio.duration*parseFloat(value)
+    const playElement:HTMLAudioElement|null = document.querySelector(".book__audio")
+    const ratio = audio.duration*(parseFloat(value)/100)
+
+    if (playElement) {
+        // Skip
+        currentTime.current = ratio
+        playElement.currentTime = currentTime.current
+        setAnimationFrame(requestAnimationFrame(timerCount))
+        cancelAnimationFrame(animationFrame)
+    }
+  }
+
+  function skipTime(value:number) {
+    const playElement:HTMLAudioElement|null = document.querySelector(".book__audio")
+
+    currentTime.current += value
+
+    // Clamp
+    if (currentTime.current <= 0) {
+        currentTime.current = 0
+    }
+    else if (currentTime.current > audio.duration) {
+        currentTime.current = audio.duration
+    }
+
+    if (playElement) {
+        // Skip
+        playElement.currentTime = currentTime.current
+    }
+
   }
 
   return (
@@ -76,7 +105,7 @@ export default function AudioPlayer({book = {} as Book}) {
         <div className="audio__controls--wrapper">
             <div className="audio__controls">
                 <button className="audio__controls--btn">
-                    <FontAwesomeIcon icon={faRotateLeft}/>
+                    <FontAwesomeIcon icon={faRotateLeft} onClick={() => skipTime(-10)}/>
                 </button>
                 <button className="audio__comntrols--btn audio__controls--btn-play" onClick={toggleAudio}>
                     {audioPlaying ? (
@@ -86,7 +115,7 @@ export default function AudioPlayer({book = {} as Book}) {
                     )}
                 </button>
                 <button className="audio__controls--btn">
-                    <FontAwesomeIcon icon={faRotateRight}/>
+                    <FontAwesomeIcon icon={faRotateRight} onClick={() => skipTime(10)}/>
                 </button>
             </div>
         </div>
