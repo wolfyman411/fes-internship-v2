@@ -19,7 +19,19 @@ export default function page() {
   async function getSelected() {
     setLoaded(false)
     const {data}:any = await axios.get("https://us-central1-summaristt.cloudfunctions.net/getBooks?status=selected")
+
+    const audioData = new Audio()
+    audioData.src = data[0].audioLink
+    audioData.preload = "metadata"
+
+    await new Promise((resolve) => {
+        audioData.addEventListener('loadedmetadata', resolve)
+    })
+
+    data[0].bookDuration = audioData.duration
+
     setSelectedBook(data[0])
+
     setLoaded(true)
   }
 
@@ -41,7 +53,7 @@ export default function page() {
                 <div className="selected__book--icon">
                   <FontAwesomeIcon icon={faPlayCircle}/>
                 </div>
-                <div className="selected__book--duration">3 mins 20 secs</div>
+                <div className="selected__book--duration">{`${(Math.floor(parseFloat(selectedBook.bookDuration)/60))} mins ${(Math.floor(parseFloat(selectedBook.bookDuration)%60)).toString().padStart(2,"0")} secs`}</div>
               </div>
             </div>
           </div>

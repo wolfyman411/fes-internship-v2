@@ -32,6 +32,17 @@ export default function page() {
   async function getData() {
     setLoaded(false)
     const {data}:any = await axios.get(`https://us-central1-summaristt.cloudfunctions.net/getBook?id=${id}`)
+
+    const audioData = new Audio()
+    audioData.src = data.audioLink
+    audioData.preload = "metadata"
+
+    await new Promise((resolve) => {
+        audioData.addEventListener('loadedmetadata', resolve)
+    })
+
+    data.bookDuration = audioData.duration
+
     setBook(data)
     setLoaded(true)
   }
@@ -58,7 +69,7 @@ export default function page() {
     return (
         <>
             <div className="inner__book">
-                <div className="inner-book__title">{book.title}</div>
+                <div className="inner-book__title">{`${book.title} ${book.subscriptionRequired ? "(Premium)" : ""}`}</div>
                 <div className="inner-book__author">{book.author}</div>
                 <div className="inner-book__sub--title">{book.subTitle}</div>
                 <div className="inner-book__wrapper">
@@ -73,7 +84,7 @@ export default function page() {
                             <div className="inner-book__icon">
                                 <FontAwesomeIcon icon={faClock}/>
                             </div>
-                            <div className="inner-book__text">00:00</div>
+                            <div className="inner-book__text">{`${(Math.floor(parseFloat(book.bookDuration)/60)).toString().padStart(2,"0")}:${(Math.floor(parseFloat(book.bookDuration)%60)).toString().padStart(2,"0")}`}</div>
                         </div>
                         <div className="inner-book__description">
                             <div className="inner-book__icon">
