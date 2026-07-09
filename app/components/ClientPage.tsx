@@ -38,7 +38,7 @@ export default function ClientPage({children = <></>}) {
     }
   }
 
-  if (pathname === "/") {
+  if (pathname === "/" || pathname === "/choose-plan") {
     return (children)
   }
   else {
