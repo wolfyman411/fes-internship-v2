@@ -24,5 +24,5 @@
     password:string,
     savedBooks:string[],
     finishedBooks:string[],
-    premium:boolean
-}
+    plan:string
+  }

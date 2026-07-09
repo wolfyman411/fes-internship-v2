@@ -9,6 +9,8 @@ export default function page() {
 
   const user = useBoundStore((state:any) => state.user)
 
+  console.log(user)
+
   return (
     <div className="container">
         <div className="row">
@@ -17,8 +19,8 @@ export default function page() {
                 <>
                     <div className="setting__content">
                         <div className="settings__sub--title">Your Subscription Plan</div>
-                        {user.premium ? (
-                            <div className="settings__text">Premium</div>
+                        {user.plan !== "basic" ? (
+                            <div className="settings__text">{user.plan}</div>
                         ) : (
                             <>
                             <div className="settings__text">Basic</div>

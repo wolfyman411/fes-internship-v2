@@ -65,6 +65,20 @@ export default function page() {
     }, {merge:true})
   }
 
+  function handleInput() {
+    if (user) {
+        if (user.plan === "basic" && book.subscriptionRequired) {
+            router.push(`/choose-plan`)
+        }
+        else {
+            router.push(`/player/${id}`)
+        }
+    }
+    else {
+        toggleLogin()
+    }
+  }
+
   function bookHTML() {
     return (
         <>
@@ -101,7 +115,7 @@ export default function page() {
                     </div>
                 </div>
                 <div className="inner-book__read--btn-wrapper">
-                    <div onClick={() => {user ? router.push(`/player/${id}`) : toggleLogin()}}>
+                    <div onClick={() => {handleInput()}}>
                         <button className="inner-book__read--btn">
                             <div className="inner-book__read--icon">
                                 <FontAwesomeIcon icon={faBookOpen}/>
@@ -109,7 +123,7 @@ export default function page() {
                             <div className="inner-book__read--text">Read</div>
                         </button>
                     </div>
-                    <div onClick={() => {user ? router.push(`/player/${id}`) : toggleLogin()}}>
+                    <div onClick={() => {handleInput()}}>
                         <button className="inner-book__read--btn">
                             <div className="inner-book__read--icon">
                                 <FontAwesomeIcon icon={faMicrophone}/>

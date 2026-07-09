@@ -33,6 +33,7 @@ export default function ClientPage({children = <></>}) {
             email:snapshot.docs[0].data().email,
             savedBooks:snapshot.docs[0].data().savedBooks,
             finishedBooks:snapshot.docs[0].data().finishedBooks,
+            plan:snapshot.docs[0].data().plan,
         }
         setUser(userRef)
     }
