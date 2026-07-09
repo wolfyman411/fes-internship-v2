@@ -9,7 +9,7 @@ import { useBoundStore } from '../zustand/zustand'
 import Link from 'next/link'
 import { auth, db, provider } from '../firestore/firebase'
 import { getDoc, doc, collection, getDocs, where, query, addDoc, setDoc } from 'firebase/firestore'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
 import { GoogleAuthProvider } from 'firebase/auth/web-extension'
 
@@ -19,6 +19,7 @@ export default function Login() {
   const toggleLogin = useBoundStore((state:any) => state.toggleLogin)
   const setUser = useBoundStore((state:any) => state.setUser)
   const router = useRouter()
+  const pathname = usePathname()
 
   const [pageState,setPageState] = useState(0) // 0: Log In, 1: Sign Up, 2: Password Reset
   const [formEmail,setFormEmail] = useState("")
@@ -53,12 +54,9 @@ export default function Login() {
         }
         // Check password
         if (userRef.password === formPassword) {
-            setUser(userRef)
-
             await signInWithEmailAndPassword(auth, userRef.email,userRef.password)
 
-            toggleLogin()
-            router.push("/for-you")
+            nextPage(userRef)
         }
         else {
             setAuthError("Incorrect Password.")
@@ -107,9 +105,7 @@ export default function Login() {
                 await setDoc(userDocRef, userRef)
             }
 
-            setUser(userRef)
-            toggleLogin()
-            router.push("/for-you")
+            nextPage(userRef)
 
         }).catch((e) => {
             const credential = GoogleAuthProvider.credentialFromError(e);
@@ -157,9 +153,7 @@ export default function Login() {
                 await setDoc(userDocRef, userRef)
             }
 
-            setUser(userRef)
-            toggleLogin()
-            router.push("/for-you")
+            nextPage(userRef)
         }
     }
 
@@ -179,9 +173,7 @@ export default function Login() {
             finishedBooks:data.finishedBooks,
         }
 
-        setUser(userRef)
-        toggleLogin()
-        router.push("/for-you")
+        nextPage(userRef)
     }
   }
 
@@ -196,6 +188,15 @@ export default function Login() {
     if (!snapshot.empty) {
         sendPasswordResetEmail(auth,formEmail)
         setAuthSuccess("Your reset email has been sent!")
+    }
+  }
+  
+  function nextPage(userRef:User) {
+    setUser(userRef)
+    toggleLogin()
+
+    if (pathname === "/") {
+        router.push("/for-you")
     }
   }
 

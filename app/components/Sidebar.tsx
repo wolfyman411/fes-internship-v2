@@ -14,8 +14,9 @@ import { auth } from '../firestore/firebase'
 
 export default function Sidebar() {
 
-  const user:User = useBoundStore((state:any) => state.user)
   const setUser = useBoundStore((state:any) => state.setUser)
+  const user = useBoundStore((state:any) => state.user)
+  const toggleLogin = useBoundStore((state:any) => state.toggleLogin)
 
   function logout() {
     signOut(auth)
@@ -74,12 +75,14 @@ export default function Sidebar() {
               </div>
               <div className="sidebar__link--text">Help & Support</div>
             </div>
-            <div className="sidebar__link--wrapper" onClick={logout}>
+            <div className="sidebar__link--wrapper" onClick={() => {user ? logout() : toggleLogin()}}>
               <div className="sidebar__link--line"></div>
               <div className="sidebar__icon--wrapper">
                 <FontAwesomeIcon icon={faRightFromBracket}/>
               </div>
-              <div className="sidebar__link--text">Logout</div>
+              <div className="sidebar__link--text">
+                {user ? "Logout" : "Login"}
+              </div>
             </div>
           </div>
         </div>
