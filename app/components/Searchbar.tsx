@@ -10,7 +10,6 @@ export default function Searchbar() {
   const user:User = useBoundStore((state:any) => state.user)
   
   return (
-    (user.email &&
     <div className='search__background'>
       <div className="search__wrapper">
         <div className="figure">
@@ -30,6 +29,5 @@ export default function Searchbar() {
         </div>
       </div>
     </div>
-    )
   )
 }

@@ -23,7 +23,6 @@ export default function Sidebar() {
   }
 
   return (
-    (user.email &&
     <>
       <div className='sidebar sidebar--closed'>
         <div className="sidebar__logo">
@@ -87,6 +86,5 @@ export default function Sidebar() {
       </div>
       <div className="sidebar__overlay sidebar__overlay--hidden"></div>
     </>
-    )
   )
 }

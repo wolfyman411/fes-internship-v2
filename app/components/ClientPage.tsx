@@ -7,11 +7,12 @@ import { onAuthStateChanged } from 'firebase/auth'
 import { auth, db } from '../firestore/firebase'
 import { useBoundStore } from '../zustand/zustand'
 import { collection, getDocs, query, where } from 'firebase/firestore'
+import { usePathname } from 'next/navigation'
 
 export default function ClientPage({children = <></>}) {
 
   const setUser = useBoundStore((state:any) => state.setUser)
-  const lastUser:User = useBoundStore((state:any) => state.user)
+  const pathname = usePathname()
 
   React.useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -37,13 +38,18 @@ export default function ClientPage({children = <></>}) {
     }
   }
 
-  return (
-    <>
-    <Sidebar />
-      <div className='wrapper'>
-          <Searchbar />
-          {children}
-      </div>
-    </>
-  )
+  if (pathname === "/") {
+    return (children)
+  }
+  else {
+    return(
+      <>
+      <Sidebar />
+        <div className='wrapper'>
+            <Searchbar />
+            {children}
+        </div>
+      </>
+    )
+  }
 }
