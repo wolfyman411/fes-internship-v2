@@ -1,7 +1,10 @@
 "use client"
 
+import { auth, db } from '@/app/firestore/firebase'
+import { useBoundStore } from '@/app/zustand/zustand'
 import { faPause, faPlay, faRotateLeft, faRotateRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { doc, setDoc } from 'firebase/firestore'
 import React, { useEffect, useRef, useState } from 'react'
 
 export default function AudioPlayer({book = {} as Book}) {
@@ -12,13 +15,48 @@ export default function AudioPlayer({book = {} as Book}) {
   const [animationFrame,setAnimationFrame] = useState(0)
   const currentTime = useRef(0)
 
+  const user:User = useBoundStore((state:any) => state.user)
+
   useEffect(() => {
     getAudio()
   },[])
 
+  // Add book to finished books
+  function finishedBook() {
+
+    if (!auth.currentUser) {
+        return
+    }
+
+    const index:number|undefined = user.finishedBooks.findIndex((e) => e === book.id)
+    if (index === -1) { // Add if not found
+        user.finishedBooks.push(book.id)
+    }
+    else { // Return if found
+        return
+    }
+
+    // Update database
+    setDoc(doc(db,"users",auth.currentUser?.uid), {
+        finishedBooks: user.finishedBooks
+    }, {merge:true})
+  }
+
   function timerCount() {
 
     const playElement:HTMLAudioElement|null = document.querySelector(".book__audio")
+
+    // End handler
+    if (playElement) {
+        if (currentTime.current >= playElement.duration) {
+            currentTime.current = 0
+            playElement.currentTime = 0
+            playElement?.pause()
+            setAudioPlaying(false)
+            finishedBook()
+            cancelAnimationFrame(animationFrame)
+        }
+    }
 
     currentTime.current = playElement?.currentTime || 0
     setAnimationFrame(requestAnimationFrame(timerCount))
