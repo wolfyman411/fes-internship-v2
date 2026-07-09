@@ -164,6 +164,26 @@ export default function Login() {
 
   }
 
+  async function signInGuest() {
+
+    const docRef = doc(db, "users", "hy42gbx8vke5yHRlqzujc318Z8t1"); //HARD CODED GUEST ID
+    const docSnap = await getDoc(docRef);
+
+    const data = docSnap.data()
+    if (data) {
+        const userRef = {
+            password:data.password,
+            email:data.email,
+            savedBooks:data.savedBooks,
+            finishedBooks:data.finishedBooks,
+        }
+
+        setUser(userRef)
+        toggleLogin()
+        router.push("/for-you")
+    }
+  }
+
   function loginHTML() {
     return (
         <div className="wrapper wrapper__full">
@@ -173,7 +193,7 @@ export default function Login() {
                     <div className="auth__content">
                         <div className="auth__title">Log in to Summarist</div>
                         <div className="auth__error">{authError}</div>
-                        <button className="btn guest__btn--wrapper">
+                        <button className="btn guest__btn--wrapper" onClick={() => {signInGuest()}}>
                             <figure className="google__icon--mask guest__icon--mask">
                                 <FontAwesomeIcon icon={faUser}/>
                             </figure>
