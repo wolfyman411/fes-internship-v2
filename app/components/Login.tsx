@@ -10,7 +10,7 @@ import Link from 'next/link'
 import { auth, db, provider } from '../firestore/firebase'
 import { getDoc, doc, collection, getDocs, where, query, addDoc, setDoc } from 'firebase/firestore'
 import { useRouter } from 'next/navigation'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
+import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
 import { GoogleAuthProvider } from 'firebase/auth/web-extension'
 
 export default function Login() {
@@ -20,19 +20,20 @@ export default function Login() {
   const setUser = useBoundStore((state:any) => state.setUser)
   const router = useRouter()
 
-  const [isLogin,setIsLogin] = useState(true)
+  const [pageState,setPageState] = useState(0) // 0: Log In, 1: Sign Up, 2: Password Reset
   const [formEmail,setFormEmail] = useState("")
   const [formPassword,setFormPassword] = useState("")
   const [authError,setAuthError] = useState("")
+  const [authSuccess,setAuthSuccess] = useState("")
 
   useEffect(() => {
-    setIsLogin(true)
+    setPageState(0)
     setAuthError("")
   },[openAuth])
 
   useEffect(() => {
     setAuthError("")
-  },[isLogin])
+  },[pageState])
 
   async function logInUser() {
 
@@ -184,6 +185,44 @@ export default function Login() {
     }
   }
 
+  async function sendResetPassword() {
+    
+    // Check information
+    const usersRef = collection(db, "users")
+    const q = query(usersRef, where("email","==",formEmail))
+    const snapshot = await getDocs(q)
+
+    // Check email
+    if (!snapshot.empty) {
+        sendPasswordResetEmail(auth,formEmail)
+        setAuthSuccess("Your reset email has been sent!")
+    }
+  }
+
+  function resetHTML() {
+    return (
+        <div className="auth__wrapper">
+            <div className="auth">
+                <div className="auth__content">
+                    <div className="auth__title">Reset your password</div>
+                    <div className="auth__error">{authError}</div>
+                    <div className="auth__success">{authSuccess}</div>
+                    <div className="auth__main--form" onClick={() => {sendResetPassword()}}>
+                        <input type="text" className="auth__main--input" placeholder='Email Address' autoComplete='current-email' onChange={(e) => setFormEmail(e.target.value)}/>
+                        <button className="btn">
+                            <span>Send reset password link</span>
+                        </button>
+                    </div>
+                </div>
+                <button className="auth__switch--btn" onClick={() => {setPageState(0)}}>Go to login</button>
+            </div>
+            <div className="auth__close--btn" onClick={() => {toggleLogin()}}>
+                <FontAwesomeIcon icon={faMultiply}/>
+            </div>
+        </div>
+    )
+  }
+
   function loginHTML() {
     return (
         <div className="auth__wrapper">
@@ -217,8 +256,8 @@ export default function Login() {
                         </button>
                     </div>
                 </div>
-                <div className="auth__forgot--password">Forgot your password?</div>
-                <button className="auth__switch--btn" onClick={() => {setIsLogin(false)}}>Don't have an account?</button>
+                <div className="auth__forgot--password" onClick={() => {setPageState(2)}}>Forgot your password?</div>
+                <button className="auth__switch--btn" onClick={() => {setPageState(1)}}>Don't have an account?</button>
                 <div className="auth__close--btn" onClick={() => {toggleLogin()}}>
                     <FontAwesomeIcon icon={faMultiply}/>
                 </div>
@@ -229,43 +268,46 @@ export default function Login() {
 
   function signupHTML() {
     return (
-        <div className="wrapper wrapper__full">
-            <div className="sidebar__overlay sidebar__overlay--hidden"></div>
-            <div className="auth__wrapper">
-                <div className="auth">
-                    <div className="auth__content">
-                        <div className="auth__title">Sign up to Summarist</div>
-                        <div className="auth__error">{authError}</div>
-                        <button className="btn google__btn--wrapper" onClick={() => {logInGoogle()}}>
-                            <figure className="google__icon--mask">
-                                <Image src={googleImg} alt="google"/>
-                            </figure>
-                            <div>Sign up with Google</div>
-                        </button>
-                        <div className="auth__separator">
-                            <div className="auth__separator--text">or</div>
-                        </div>
-                        <div className="auth__main--form">
-                            <input type="text" className="auth__main--input" placeholder='Email Address' autoComplete='current-email' onChange={(e) => setFormEmail(e.target.value)}/>
-                            <input type="password" className="auth__main--input" placeholder='Password' autoComplete='current-password' onChange={(e) => setFormPassword(e.target.value)}/>
-                            <button className="btn" onClick={() => signUpUser()}>
-                                <span>Sign up</span>
-                            </button>
-                        </div>
+        <div className="auth__wrapper">
+            <div className="auth">
+                <div className="auth__content">
+                    <div className="auth__title">Sign up to Summarist</div>
+                    <div className="auth__error">{authError}</div>
+                    <button className="btn google__btn--wrapper" onClick={() => {logInGoogle()}}>
+                        <figure className="google__icon--mask">
+                            <Image src={googleImg} alt="google"/>
+                        </figure>
+                        <div>Sign up with Google</div>
+                    </button>
+                    <div className="auth__separator">
+                        <div className="auth__separator--text">or</div>
                     </div>
-                    <button className="auth__switch--btn" onClick={() => {setIsLogin(true)}}>Already have an account?</button>
-                    <div className="auth__close--btn" onClick={() => {toggleLogin()}}>
-                        <FontAwesomeIcon icon={faMultiply}/>
+                    <div className="auth__main--form">
+                        <input type="text" className="auth__main--input" placeholder='Email Address' autoComplete='current-email' onChange={(e) => setFormEmail(e.target.value)}/>
+                        <input type="password" className="auth__main--input" placeholder='Password' autoComplete='current-password' onChange={(e) => setFormPassword(e.target.value)}/>
+                        <button className="btn" onClick={() => signUpUser()}>
+                            <span>Sign up</span>
+                        </button>
                     </div>
                 </div>
+                <button className="auth__switch--btn" onClick={() => {setPageState(0)}}>Already have an account?</button>
+                <div className="auth__close--btn" onClick={() => {toggleLogin()}}>
+                    <FontAwesomeIcon icon={faMultiply}/>
+                </div>
             </div>
-        </div> 
+        </div>
     )
   }
 
-  return (
-        (openAuth ? (
-            isLogin ? loginHTML() : signupHTML()
-        ) : null)
-    )
+  if (openAuth) {
+    if (pageState === 0) {
+        return(loginHTML())
+    }
+    else if (pageState === 1) {
+        return(signupHTML())
+    }
+    else {
+        return(resetHTML())
+    }
+  }
 }

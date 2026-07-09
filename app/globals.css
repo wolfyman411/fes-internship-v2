@@ -612,6 +612,11 @@ button:disabled {
     margin-bottom: 24px;
 }
 
+.auth__success {
+    color: #2bd97c;
+    margin-bottom: 16px;
+}
+
 .auth__error {
     color: #f56c6c;
     margin-bottom: 16px;
