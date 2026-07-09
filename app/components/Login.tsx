@@ -51,6 +51,7 @@ export default function Login() {
             email:snapshot.docs[0].data().email,
             savedBooks:snapshot.docs[0].data().savedBooks,
             finishedBooks:snapshot.docs[0].data().finishedBooks,
+            premium:snapshot.docs[0].data().premium,
         }
         // Check password
         if (userRef.password === formPassword) {
@@ -83,6 +84,7 @@ export default function Login() {
                 email:"",
                 savedBooks:[],
                 finishedBooks:[],
+                premium:false,
             }
 
             // Sign In
@@ -94,6 +96,7 @@ export default function Login() {
                     email:data.email,
                     savedBooks:data.savedBooks,
                     finishedBooks:data.finishedBooks,
+                    premium:data.premium,
                 }
             }
 
@@ -144,7 +147,8 @@ export default function Login() {
                 password:formPassword,
                 email:formEmail,
                 savedBooks:[],
-                finishedBooks:[]
+                finishedBooks:[],
+                premium:false,
             }
 
             await createUserWithEmailAndPassword(auth, userRef.email,userRef.password)
@@ -171,6 +175,7 @@ export default function Login() {
             email:data.email,
             savedBooks:data.savedBooks,
             finishedBooks:data.finishedBooks,
+            premium:data.premium,
         }
 
         nextPage(userRef)

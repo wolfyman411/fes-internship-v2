@@ -23,5 +23,6 @@
     email:string,
     password:string,
     savedBooks:string[],
-    finishedBooks:string[]
+    finishedBooks:string[],
+    premium:boolean
 }

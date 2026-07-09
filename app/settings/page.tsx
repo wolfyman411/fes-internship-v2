@@ -3,6 +3,7 @@
 import React from 'react'
 import { useBoundStore } from '../zustand/zustand'
 import LoginBlocker from '../components/LoginBlocker';
+import Link from 'next/link';
 
 export default function page() {
 
@@ -16,7 +17,16 @@ export default function page() {
                 <>
                     <div className="setting__content">
                         <div className="settings__sub--title">Your Subscription Plan</div>
-                        <div className="settings__text">PLAN</div>
+                        {user.premium ? (
+                            <div className="settings__text">Premium</div>
+                        ) : (
+                            <>
+                            <div className="settings__text">Basic</div>
+                            <Link href={"/choose-plan"}>
+                                <div className="btn settings__upgrade--btn">Upgrade to Premium</div>
+                            </Link>
+                            </>
+                        )}
                     </div>
                     <div className="setting__content">
                         <div className="settings__sub--title">Email</div>
