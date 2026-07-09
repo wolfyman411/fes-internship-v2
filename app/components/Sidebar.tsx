@@ -75,12 +75,12 @@ export default function Sidebar() {
               </div>
               <div className="sidebar__link--text">Help & Support</div>
             </div>
-            <div className="sidebar__link--wrapper">
+            <div className="sidebar__link--wrapper" onClick={logout}>
               <div className="sidebar__link--line"></div>
               <div className="sidebar__icon--wrapper">
                 <FontAwesomeIcon icon={faRightFromBracket}/>
               </div>
-              <div className="sidebar__link--text" onClick={logout}>Logout</div>
+              <div className="sidebar__link--text">Logout</div>
             </div>
           </div>
         </div>

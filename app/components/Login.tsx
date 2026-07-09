@@ -7,10 +7,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMultiply, faUser } from '@fortawesome/free-solid-svg-icons'
 import { useBoundStore } from '../zustand/zustand'
 import Link from 'next/link'
-import { auth, db } from '../firestore/firebase'
+import { auth, db, provider } from '../firestore/firebase'
 import { getDoc, doc, collection, getDocs, where, query, addDoc, setDoc } from 'firebase/firestore'
 import { useRouter } from 'next/navigation'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
+import { GoogleAuthProvider } from 'firebase/auth/web-extension'
 
 export default function Login() {
 
@@ -67,6 +68,52 @@ export default function Login() {
     else {
         setAuthError("That user doesn't exist.")
     }
+  }
+
+  async function logInGoogle() {
+    signInWithPopup(auth,provider)
+        .then(async (result) => {
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            const user = result.user
+
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef);
+
+            let userRef:User = {
+                password:"",
+                email:"",
+                savedBooks:[],
+                finishedBooks:[],
+            }
+
+            // Sign In
+            if (docSnap.exists()) {
+
+                const data = docSnap.data()
+                userRef = {
+                    password:data.password,
+                    email:data.email,
+                    savedBooks:data.savedBooks,
+                    finishedBooks:data.finishedBooks,
+                }
+            }
+
+            // Sign Up
+            else if (user.email) {
+                userRef.email = user.email
+
+                const userDocRef = doc(db, "users", user.uid)
+                await setDoc(userDocRef, userRef)
+            }
+
+            setUser(userRef)
+            toggleLogin()
+            router.push("/for-you")
+
+        }).catch((e) => {
+            const credential = GoogleAuthProvider.credentialFromError(e);
+            setAuthError("Google log in failed")
+        })
   }
 
   async function signUpUser() {
@@ -135,7 +182,7 @@ export default function Login() {
                         <div className="auth__separator">
                             <div className="auth__separator--text">or</div>
                         </div>
-                        <button className="btn google__btn--wrapper">
+                        <button className="btn google__btn--wrapper" onClick={() => {logInGoogle()}}>
                             <figure className="google__icon--mask">
                                 <Image src={googleImg} alt="google"/>
                             </figure>
@@ -172,7 +219,7 @@ export default function Login() {
                     <div className="auth__content">
                         <div className="auth__title">Sign up to Summarist</div>
                         <div className="auth__error">{authError}</div>
-                        <button className="btn google__btn--wrapper">
+                        <button className="btn google__btn--wrapper" onClick={() => {logInGoogle()}}>
                             <figure className="google__icon--mask">
                                 <Image src={googleImg} alt="google"/>
                             </figure>
