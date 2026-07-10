@@ -7,11 +7,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMultiply, faUser } from '@fortawesome/free-solid-svg-icons'
 import { useBoundStore } from '../zustand/zustand'
 import Link from 'next/link'
-import { auth, db, provider } from '../firestore/firebase'
+import { app, auth, db, provider } from '../firestore/firebase'
 import { getDoc, doc, collection, getDocs, where, query, addDoc, setDoc } from 'firebase/firestore'
 import { usePathname, useRouter } from 'next/navigation'
 import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
 import { GoogleAuthProvider } from 'firebase/auth/web-extension'
+import { getPremiumStatus } from '../stripe/getPremiumStatus'
 
 export default function Login() {
 
@@ -57,7 +58,7 @@ export default function Login() {
         if (userRef.password === formPassword) {
             await signInWithEmailAndPassword(auth, userRef.email,userRef.password)
 
-            nextPage(userRef)
+            handleLogin(userRef)
         }
         else {
             setAuthError("Incorrect Password.")
@@ -108,7 +109,7 @@ export default function Login() {
                 await setDoc(userDocRef, userRef)
             }
 
-            nextPage(userRef)
+            handleLogin(userRef)
 
         }).catch((e) => {
             const credential = GoogleAuthProvider.credentialFromError(e);
@@ -157,7 +158,7 @@ export default function Login() {
                 await setDoc(userDocRef, userRef)
             }
 
-            nextPage(userRef)
+            handleLogin(userRef)
         }
     }
 
@@ -180,7 +181,7 @@ export default function Login() {
 
         await signInWithEmailAndPassword(auth, data.email,data.password)
 
-        nextPage(userRef)
+        handleLogin(userRef)
     }
   }
 
@@ -198,7 +199,12 @@ export default function Login() {
     }
   }
   
-  function nextPage(userRef:User) {
+  async function handleLogin(userRef:User) {
+
+    // Check premium status
+    const newPremiumStatus = auth.currentUser ? await getPremiumStatus(app) : false
+    console.log(newPremiumStatus)
+
     setUser(userRef)
     toggleLogin()
 

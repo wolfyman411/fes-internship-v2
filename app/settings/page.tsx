@@ -9,8 +9,6 @@ export default function page() {
 
   const user = useBoundStore((state:any) => state.user)
 
-  console.log(user)
-
   return (
     <div className="container">
         <div className="row">
