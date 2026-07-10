@@ -6,15 +6,26 @@ import plan_img from '../assets/pricing-top.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faFile, faHandshake, faSeedling } from '@fortawesome/free-solid-svg-icons'
 import Footer from '../home/components/Footer'
+import { getCheckoutUrl } from '../stripe/stripePayment'
+import { app } from '../firestore/firebase'
+import { useRouter } from 'next/navigation'
+
 
 export default function page() {
 
   const [openedCard,setOpenedCard] = useState<HTMLElement>()
   const [plusSelected,setPlusSelected] = useState(true)
+  const router = useRouter()
 
   useEffect(() => {
     handlePlanCards()
   },[plusSelected])
+
+  async function handleCheckout() {
+    const priceId = "price_1TrRV1AEHUixjDPEa1YvkqcH"
+    const checkoutUrl = await getCheckoutUrl(app,priceId)
+    router.push(checkoutUrl)
+  }
 
   function displayCard(element:HTMLElement) {
 
@@ -133,13 +144,13 @@ export default function page() {
               </div>
               <div className="plan__card--content">
                 <div className="plan__card--title">Premium Monthly</div>
-                <div className="plan__card--price">$9.99/year</div>
+                <div className="plan__card--price">$9.99/month</div>
                 <div className="plan__card--text">No trial included</div>
             </div>
             </div>
             <div className="plan__card--cta">
               <span className="btn--wrapper">
-                <button className="btn" style={{width:"300px"}}>
+                <button className="btn" style={{width:"300px"}} onClick={() => handleCheckout()}>
                   <span>{plusSelected ? "Start your free 7-day trial" : "Start your first month"}</span>
                 </button>
               </span>
