@@ -37,7 +37,6 @@ export const getCheckoutUrl = async (
                 reject(new Error(`An error occurred: ${error.message}`))
             }
             if (url) {
-                console.log("Stripe Checkout URL:", url)
                 unsubscribe()
                 resolve(url)
             }

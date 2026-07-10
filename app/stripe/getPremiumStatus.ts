@@ -14,17 +14,25 @@ export const getPremiumStatus = async (app: FirebaseApp) => {
         where("status","in",["trialing","active"])
     )
 
-    return new Promise<boolean>((resolve,reject) => {
+    return new Promise<string>((resolve,reject) => {
         const unsubscribe = onSnapshot(
             q,
             (snapshot) => {
-                console.log("Subscription snapshot", snapshot.docs.length)
                 if (snapshot.docs.length === 0) {
                     console.log("No active or trialing subscriptions found")
-                    resolve(false)
+                    resolve("basic")
                 } else {
-                    console.log("Active or trialing subscription found")
-                    resolve(true)
+                    const productInfo = snapshot.docs[0].data().product
+                    // Determine the subscription type
+                    if (productInfo.id === "prod_Ur9oI9Qvwvh8KQ") {
+                        resolve("premium-plus")
+                    }
+                    else if (productInfo.id === "prod_Ur9opm5B2xp7p8") {
+                        resolve("premium")
+                    }
+                    else {
+                        resolve("basic")
+                    }
                 }
                 unsubscribe()
             },

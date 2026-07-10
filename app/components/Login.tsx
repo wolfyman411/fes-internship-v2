@@ -202,8 +202,8 @@ export default function Login() {
   async function handleLogin(userRef:User) {
 
     // Check premium status
-    const newPremiumStatus = auth.currentUser ? await getPremiumStatus(app) : false
-    console.log(newPremiumStatus)
+    const newPremiumStatus = auth.currentUser ? await getPremiumStatus(app) : "basic"
+    userRef.plan = newPremiumStatus
 
     setUser(userRef)
     toggleLogin()
