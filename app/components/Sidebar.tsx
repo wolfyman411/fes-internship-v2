@@ -6,7 +6,7 @@ import logo from "../assets/logo.png"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHome, faBookmark, faPenToSquare, faQuestionCircle } from '@fortawesome/free-regular-svg-icons'
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch'
-import { faGear, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import { faA, faGear, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link'
 import { useBoundStore } from '../zustand/zustand'
 import { signOut } from 'firebase/auth'
@@ -73,6 +73,23 @@ export default function Sidebar({showSidebar = false, toggleSidebar}) {
     linkLines[index]?.classList.add("active--tab")
   }
 
+  // This only works on the player page
+  function changeReadingFont(element:HTMLElement,size:string) {
+    const getFontSizeHTMLs = document.querySelectorAll(".sidebar__font--size-icon")
+
+    // Reset all
+    for (const item of getFontSizeHTMLs) {
+      item.classList.remove("sidebar__font--size-icon--active")
+    }
+
+    // Set the active one
+    element.classList.add("sidebar__font--size-icon--active")
+
+    // Change the reading size
+    const bookSummary = document.querySelector(".audio__book--summary")
+    bookSummary.style.fontSize = size
+  }
+
   function logout() {
     signOut(auth)
     const userRef:User = {
@@ -121,6 +138,22 @@ export default function Sidebar({showSidebar = false, toggleSidebar}) {
               </div>
               <div className="sidebar__link--text">Search</div>
             </div>
+            {pathname.startsWith("/player/") && (
+              <div className="sidebar__link--wrapper sidebar__font--size-wrapper">
+                <div className="sidebar__link--text sidebar__font--size-icon" onClick={(e) => changeReadingFont(e.currentTarget,"16px")}>
+                  <div>Aa</div>
+                </div>
+                <div className="sidebar__link--text sidebar__font--size-icon" onClick={(e) => changeReadingFont(e.currentTarget,"18px")}>
+                  <div>Aa</div>
+                </div>
+                <div className="sidebar__link--text sidebar__font--size-icon" onClick={(e) => changeReadingFont(e.currentTarget,"22px")}>
+                  <div>Aa</div>
+                </div>
+                <div className="sidebar__link--text sidebar__font--size-icon" onClick={(e) => changeReadingFont(e.currentTarget,"26px")}>
+                  <div>Aa</div>
+                </div>
+              </div>
+            )}
           </div>
           <div className="sidebar__bottom">
             <Link href="/settings" className="sidebar__link--wrapper" onClick={() => toggleSidebar(true)}>

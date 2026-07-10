@@ -1319,6 +1319,50 @@ button:disabled {
     color: #032b41;
 }
 
+.sidebar__link--wrapper:last-child {
+    margin-bottom: 0;
+}
+
+.sidebar__font--size-wrapper {
+    display: flex;
+    margin-left: 24px;
+    gap: 8px;
+}
+
+.sidebar__font--size-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+}
+
+.sidebar__font--size-icon--active {
+    border-bottom: 3px solid #2bd97c;
+}
+
+.sidebar__font--size-wrapper:hover {
+    background-color: transparent;
+    cursor: default;
+}
+
+.sidebar__font--size-icon:nth-child(1) div {
+    font-size: 20px;
+}
+
+.sidebar__font--size-icon:nth-child(2) div {
+    font-size: 24px;
+}
+
+.sidebar__font--size-icon:nth-child(3) div {
+    font-size: 28px;
+}
+
+.sidebar__font--size-icon:nth-child(4) div {
+    font-size: 32px;
+}
+
 /* AUDIO PLAYER */
 
 .audio__wrapper {
