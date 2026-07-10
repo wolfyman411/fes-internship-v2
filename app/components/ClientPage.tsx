@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Searchbar from './Searchbar'
 import Sidebar from './Sidebar'
 import { onAuthStateChanged } from 'firebase/auth'
@@ -13,6 +13,7 @@ export default function ClientPage({children = <></>}) {
 
   const setUser = useBoundStore((state:any) => state.setUser)
   const pathname = usePathname()
+  const [showSidebar,setShowSidebar] = useState(false)
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -21,6 +22,10 @@ export default function ClientPage({children = <></>}) {
       }
     })
   },[])
+
+  function toggleSidebar(toggle = showSidebar) {
+    setShowSidebar(!toggle)
+  }
 
   async function getLastUser(email:string|null) {
     const usersRef = collection(db, "users")
@@ -45,9 +50,9 @@ export default function ClientPage({children = <></>}) {
   else {
     return(
       <>
-      <Sidebar />
+      <Sidebar showSidebar={showSidebar} toggleSidebar={toggleSidebar}/>
         <div className='wrapper'>
-            <Searchbar />
+            <Searchbar toggleSidebar={toggleSidebar}/>
             {children}
         </div>
       </>

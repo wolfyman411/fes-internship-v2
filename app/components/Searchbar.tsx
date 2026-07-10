@@ -1,11 +1,11 @@
 "use client"
 
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 import { useBoundStore } from '../zustand/zustand'
 
-export default function Searchbar() {
+export default function Searchbar({toggleSidebar}) {
 
   const user:User = useBoundStore((state:any) => state.user)
   
@@ -24,7 +24,8 @@ export default function Searchbar() {
               </div>
             </div>
           </div>
-          <div className="sidebar__toggle--btn">
+          <div className="sidebar__toggle--btn" onClick={() => toggleSidebar(false)}>
+            <FontAwesomeIcon icon={faBars}/>
           </div>
         </div>
       </div>

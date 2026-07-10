@@ -4,12 +4,15 @@ import { faClock, faStar } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
 import React from 'react'
+import { useBoundStore } from '../zustand/zustand'
 
 export default function BookDisplay({data = {} as Book}) {
 
+  const user = useBoundStore((state:any) => state.user)
+
   return (
     <Link href={`/book/${data.id}`} className="for-you__recommended--books-link">
-    {data.subscriptionRequired && <div className="book__pill book__pill--subscription-required">Premium</div>}
+    {data.subscriptionRequired && (!user.plan || user.plan === "basic") && <div className="book__pill book__pill--subscription-required">Premium</div>}
     <figure className="book__image--wrapper" style={{marginBottom:"8px"}}>
         <img src={data.imageLink} alt="" className="book__image" />
     </figure>

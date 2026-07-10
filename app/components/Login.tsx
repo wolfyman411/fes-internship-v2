@@ -216,6 +216,7 @@ export default function Login() {
     if (pathname === "/") {
         router.push("/for-you")
     }
+    setLoginState("")
   }
 
   function resetHTML() {

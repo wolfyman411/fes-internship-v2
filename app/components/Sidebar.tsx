@@ -1,7 +1,7 @@
 "use client"
 
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import logo from "../assets/logo.png"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHome, faBookmark, faPenToSquare, faQuestionCircle } from '@fortawesome/free-regular-svg-icons'
@@ -13,12 +13,34 @@ import { signOut } from 'firebase/auth'
 import { auth } from '../firestore/firebase'
 import { usePathname } from 'next/navigation'
 
-export default function Sidebar() {
+export default function Sidebar({showSidebar = false, toggleSidebar}) {
 
   const setUser = useBoundStore((state:any) => state.setUser)
   const user = useBoundStore((state:any) => state.user)
   const toggleLogin = useBoundStore((state:any) => state.toggleLogin)
   const pathname = usePathname()
+
+  // Adjust tab elements on address change
+  useEffect(() => {
+    changeActiveTabs()
+  },[pathname])
+
+  useEffect(() => {
+    const sidebarHTML = document.querySelector(".sidebar")
+    const sidebarOverlay = document.querySelector(".sidebar__overlay")
+    if (showSidebar) {
+      sidebarHTML?.classList.remove("sidebar--closed")
+      sidebarHTML?.classList.add("sidebar--opened")
+
+      sidebarOverlay?.classList.remove("sidebar__overlay--hidden")
+    }
+    else {
+      sidebarHTML?.classList.remove("sidebar--opened")
+      sidebarHTML?.classList.add("sidebar--closed")
+
+      sidebarOverlay?.classList.add("sidebar__overlay--hidden")
+    }
+  },[showSidebar])
 
   const navStyle = () => {
     if (!pathname.startsWith("/player/")) {
@@ -27,6 +49,28 @@ export default function Sidebar() {
     else {
       return {height:"calc(-140px + 100vh)"}
     }
+  }
+
+  function changeActiveTabs() {
+
+    const linkLines = document.querySelectorAll(".sidebar__link--line")
+    let index = -1
+
+    // Reset all to default
+    for (const item of linkLines) {
+      item.classList.remove("active--tab")
+    }
+
+    // Specific page handling
+    if (pathname === "/for-you") {
+      index = 0
+    } else if (pathname === "/library") {
+      index = 1
+    } else if (pathname === "/settings") {
+      index = 4
+    }
+
+    linkLines[index]?.classList.add("active--tab")
   }
 
   function logout() {
@@ -49,28 +93,28 @@ export default function Sidebar() {
         </div>
         <div className="sidebar__wrapper" style={navStyle()}>
           <div className="sidebar__top">
-            <Link href="/for-you" className="sidebar__link--wrapper">
+            <Link href="/for-you" className="sidebar__link--wrapper" onClick={() => toggleSidebar(true)}>
               <div className="sidebar__link--line"></div>
               <div className="sidebar__icon--wrapper">
                 <FontAwesomeIcon icon={faHome}/>
               </div>
               <div className="sidebar__link--text">For you</div>
             </Link>
-            <Link href="/library" className="sidebar__link--wrapper">
+            <Link href="/library" className="sidebar__link--wrapper" onClick={() => toggleSidebar(true)}>
               <div className="sidebar__link--line"></div>
               <div className="sidebar__icon--wrapper">
                 <FontAwesomeIcon icon={faBookmark}/>
               </div>
               <div className="sidebar__link--text">My Library</div>
             </Link>
-            <div className="sidebar__link--wrapper">
+            <div className="sidebar__link--wrapper sidebar__link--not-allowed">
               <div className="sidebar__link--line"></div>
               <div className="sidebar__icon--wrapper">
                 <FontAwesomeIcon icon={faPenToSquare}/>
               </div>
               <div className="sidebar__link--text">Highlights</div>
             </div>
-            <div className="sidebar__link--wrapper">
+            <div className="sidebar__link--wrapper sidebar__link--not-allowed">
               <div className="sidebar__link--line"></div>
               <div className="sidebar__icon--wrapper">
                 <FontAwesomeIcon icon={faSearch}/>
@@ -79,14 +123,14 @@ export default function Sidebar() {
             </div>
           </div>
           <div className="sidebar__bottom">
-            <Link href="/settings" className="sidebar__link--wrapper">
+            <Link href="/settings" className="sidebar__link--wrapper" onClick={() => toggleSidebar(true)}>
               <div className="sidebar__link--line"></div>
               <div className="sidebar__icon--wrapper">
                 <FontAwesomeIcon icon={faGear}/>
               </div>
               <div className="sidebar__link--text">Settings</div>
             </Link>
-            <div className="sidebar__link--wrapper">
+            <div className="sidebar__link--wrapper sidebar__link--not-allowed">
               <div className="sidebar__link--line"></div>
               <div className="sidebar__icon--wrapper">
                 <FontAwesomeIcon icon={faQuestionCircle}/>
@@ -105,7 +149,7 @@ export default function Sidebar() {
           </div>
         </div>
       </div>
-      <div className="sidebar__overlay sidebar__overlay--hidden"></div>
+      <div className="sidebar__overlay sidebar__overlay--hidden" onClick={() => toggleSidebar(true)}></div>
     </>
   )
 }

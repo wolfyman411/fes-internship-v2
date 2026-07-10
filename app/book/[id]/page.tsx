@@ -83,7 +83,7 @@ export default function page() {
     return (
         <>
             <div className="inner__book">
-                <div className="inner-book__title">{`${book.title} ${book.subscriptionRequired ? "(Premium)" : ""}`}</div>
+                <div className="inner-book__title">{`${book.title} ${book.subscriptionRequired && (!user.plan || user.plan === "basic") ? "(Premium)" : ""}`}</div>
                 <div className="inner-book__author">{book.author}</div>
                 <div className="inner-book__sub--title">{book.subTitle}</div>
                 <div className="inner-book__wrapper">
