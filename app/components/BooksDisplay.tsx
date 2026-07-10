@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import BookDisplay from './BookDisplay'
 import axios from 'axios'
+import { Book, getAudioDuration } from '../globals'
 
 export default function BooksDisplay({apiCall = "", dataArray=[] as string[]}) {
 
@@ -52,23 +53,6 @@ export default function BooksDisplay({apiCall = "", dataArray=[] as string[]}) {
 
     setBooksData(responseData)
     setLoaded(true)
-  }
-
-  function getAudioDuration(url:string): Promise<string> {
-    return new Promise((resolve) => {
-      const audio = new Audio()
-      audio.src = url
-      audio.preload = "metadata"
-
-      const loadedMetadata = () => {
-        const minutes = Math.floor(audio.duration/60)
-        const seconds = Math.floor(audio.duration%60)
-        audio.removeEventListener('loadedmetadata', loadedMetadata);
-        resolve(`${minutes.toString().padStart(2,"0")}:${seconds.toString().padStart(2,"0")}`)
-      }
-
-      audio.addEventListener('loadedmetadata', loadedMetadata);
-    })
   }
 
 
