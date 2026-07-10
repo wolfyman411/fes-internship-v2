@@ -1,6 +1,7 @@
 "use client"
 
 import { auth, db } from '@/app/firestore/firebase'
+import { Book, User } from '@/app/globals'
 import { useBoundStore } from '@/app/zustand/zustand'
 import { faPause, faPlay, faRotateLeft, faRotateRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

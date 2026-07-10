@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/app/firestore/firebase'
+import { Book, User } from '@/app/globals'
 
 export default function page() {
 

@@ -6,6 +6,7 @@ import Link from 'next/link'
 import React from 'react'
 import { useBoundStore } from '../zustand/zustand'
 import { width } from '@fortawesome/free-solid-svg-icons/faSearch'
+import { Book } from '../globals'
 
 export default function BookDisplay({data = {} as Book}) {
 

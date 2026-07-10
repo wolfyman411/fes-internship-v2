@@ -8,6 +8,7 @@ import { auth, db } from '../firestore/firebase'
 import { useBoundStore } from '../zustand/zustand'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import { usePathname } from 'next/navigation'
+import { User } from '../globals'
 
 export default function ClientPage({children = <></>}) {
 

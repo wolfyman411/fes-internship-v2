@@ -17,7 +17,7 @@ export default function Searchbar({toggleSidebar}) {
 
   useEffect(() => {
     if (searchText.length > 0) {
-      getBooksData()
+      processChange()
     }
   },[searchText])
 
@@ -46,9 +46,19 @@ export default function Searchbar({toggleSidebar}) {
     setSearchText("")
   }
 
-  function searchBookHTML(book:Book) {
+  function debounce(func, timeout = 300){
+    let timer:any;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => { func.apply(this, args); }, timeout);
+    };
+  }
+
+  const processChange = debounce(() => getBooksData());
+
+  function searchBookHTML(book:Book, index:number) {
     return (
-      <Link href={`/book/${book.id}`} className="search__book--link">
+      <Link href={`/book/${book.id}`} className="search__book--link" onClick={clearSearch} key={index}>
         <figure className="book__image--wrapper" style={{height:"80px",width:"80px",minWidth:"80px"}}>
           <img className="book__image" src={book.imageLink} style={{display:"block"}}></img>
         </figure>
@@ -75,7 +85,7 @@ export default function Searchbar({toggleSidebar}) {
           loaded ? (
               booksData.length > 0 ? (
                 booksData.map((book:Book,index:any) => {
-                  return(searchBookHTML(book))
+                  return(searchBookHTML(book,index))
                 })
               ) : (
                 <div>No books found</div>
@@ -83,7 +93,7 @@ export default function Searchbar({toggleSidebar}) {
           ) : (
               new Array(5).fill("_").map((book:any,index:any) => {
                 return(
-                  <div className="skeleton" style={{width:"100%", height:"120px", marginTop:"12px"}}></div>
+                  <div className="skeleton" style={{width:"100%", height:"120px", marginTop:"12px"}} key={index}></div>
                 )
               })
           )

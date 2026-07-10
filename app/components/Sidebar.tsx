@@ -12,6 +12,7 @@ import { useBoundStore } from '../zustand/zustand'
 import { signOut } from 'firebase/auth'
 import { auth } from '../firestore/firebase'
 import { usePathname } from 'next/navigation'
+import { User } from '../globals'
 
 export default function Sidebar({showSidebar = false, toggleSidebar}) {
 

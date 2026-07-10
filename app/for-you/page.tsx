@@ -6,6 +6,7 @@ import { faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
 import BooksDisplay from '../components/BooksDisplay'
 import Link from 'next/link'
+import { Book } from '../globals'
 
 export default function page() {
 

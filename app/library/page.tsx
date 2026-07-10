@@ -1,12 +1,9 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlayCircle } from '@fortawesome/free-solid-svg-icons'
-import axios from 'axios'
 import BooksDisplay from '../components/BooksDisplay'
 import { useBoundStore } from '../zustand/zustand'
 import LoginBlocker from '../components/LoginBlocker'
+import { User } from '../globals'
 
 export default function page() {
 

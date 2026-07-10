@@ -13,6 +13,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
 import { GoogleAuthProvider } from 'firebase/auth/web-extension'
 import { getPremiumStatus } from '../stripe/getPremiumStatus'
+import { User } from '../globals'
 
 export default function Login() {
 

@@ -13,6 +13,7 @@ import { useBoundStore } from '@/app/zustand/zustand'
 import { doc, setDoc } from 'firebase/firestore'
 import { auth, db } from '@/app/firestore/firebase'
 import Link from 'next/link'
+import { Book, User } from '@/app/globals'
 
 export default function page() {
 
