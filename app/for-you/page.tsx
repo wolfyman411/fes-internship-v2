@@ -62,13 +62,41 @@ export default function page() {
     )
   }
 
+  function skeletonHTML() {
+    return (
+      <>
+        <div className="selected__book">
+          <div className="selected__book--sub-title">
+            <div className="skeleton" style={{width:"100%", height:"64px"}}></div>
+          </div>
+          <div className="selected__book--line"></div>
+          <div className="selected__book--content">
+            <figure className="book__image--wrapper" style={{height:"140px",width:"140px",minWidth:"140px"}}>
+              <div className="skeleton" style={{height:"100%"}}></div>
+            </figure>
+            <div className="selected__book--text">
+              <div className="selected__book--title">
+                <div className="skeleton" style={{width:"100%", height:"32px"}}></div>
+              </div>
+              <div className="selected__book--author">
+                <div className="skeleton" style={{width:"40%", height:"24px"}}></div>
+              </div>
+              <div className="selected__book--duration-wrapper">
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    )
+  }
+
   return (
     <div>
       <div className="row">
         <div className="container">
           <div className="for-you__wrapper">
             <div className="for-you__title">Selected just for you</div>
-            {loaded ? selectedBookHTML() : null}
+            {loaded ? selectedBookHTML() : skeletonHTML()}
             <div>
               <div className="for-you__title">Recommended For You</div>
               <div className="for-you__sub--title">We think you'll like these</div>

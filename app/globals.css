@@ -110,6 +110,10 @@ button:disabled {
     pointer-events: none;
 }
 
+.skeleton {
+    background-color: lightgray;
+}
+
 .fa-spinner {
     animation: infinite linear 1s spin;
 }
