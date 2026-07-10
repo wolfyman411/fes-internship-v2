@@ -1157,6 +1157,10 @@ button:disabled {
     transition: opacity .2s;
 }
 
+.inner-book__read--btn:hover {
+    opacity: .8;
+}
+
 .inner-book__read--icon {
     display: flex;
 }
@@ -1176,6 +1180,10 @@ button:disabled {
     margin-bottom: 40px;
     font-size: 18px;
     transition: color .2s;
+}
+
+.inner-book__bookmark:hover {
+    color: #044298;
 }
 
 .inner-book__bookmark--icon {

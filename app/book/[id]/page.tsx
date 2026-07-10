@@ -170,7 +170,30 @@ export default function page() {
 
   function skeletonHTML() {
     return (
-        null
+        <>
+            <div className="inner__book">
+                <div className="inner-book__title">
+                    <div className="skeleton" style={{height:"64px", width:"100%"}}></div>
+                </div>
+                <div className="inner-book__author">
+                    <div className="skeleton" style={{height:"32px", width:"200px"}}></div>
+                </div>
+                <div className="inner-book__sub--title">
+                    <div className="skeleton" style={{height:"32px", width:"400px"}}></div>
+                </div>
+                <div className="inner-book__wrapper">
+                    <div className="skeleton" style={{height:"64px", width:"60%"}}></div>
+                </div>
+                <div className="inner-book__book--description">
+                    <div className="skeleton" style={{height:"70vh", width:"100%"}}></div>
+                </div>
+            </div>
+            <div className="inner-book--img-wrapper">
+                <figure className="book__image--wrapper" style={{height:"300px",width:"300px",minWidth:"300px"}}>
+                    <div className="skeleton" style={{height:"100%", width:"100%"}}></div>
+                </figure>
+            </div>
+        </>
     )
   }
 
