@@ -9,7 +9,7 @@ import React, { useEffect, useRef, useState } from 'react'
 
 export default function AudioPlayer({book = {} as Book}) {
 
-  const [audio,setAudio] = useState(() => new Audio())
+  const [audio,setAudio] = useState<HTMLAudioElement | null>(null);
   const [audioPlaying,setAudioPlaying] = useState(true)
   const [loaded,setLoaded] = useState(false)
   const [animationFrame,setAnimationFrame] = useState(0)
@@ -19,8 +19,10 @@ export default function AudioPlayer({book = {} as Book}) {
   const toggleLogin = useBoundStore((state:any) => state.toggleLogin)
 
   useEffect(() => {
+    console.log(book)
+    setAudio(new Audio())
     getAudio()
-  },[])
+  },[book.id])
 
   // Add book to finished books
   function finishedBook() {
@@ -126,44 +128,92 @@ export default function AudioPlayer({book = {} as Book}) {
 
   }
 
-  return (
-    (loaded &&
-    <div className="audio__wrapper">
-        <audio src={book.audioLink} className='book__audio'/>
-        <div className="audio__track--wrapper">
-            <figure className="audio__track--image-mask">
-                <figure className="book__image--wrapper" style={{height:"48px", width:"48px", minWidth:"48px"}}>
-                    <img className='book__image' src={book.imageLink} alt="book" style={{display:"block"}}/>
+  function playerHTML() {
+    return (
+        <div className="audio__wrapper">
+            <audio src={book.audioLink} className='book__audio'/>
+            <div className="audio__track--wrapper">
+                <figure className="audio__track--image-mask">
+                    <figure className="book__image--wrapper" style={{height:"48px", width:"48px", minWidth:"48px"}}>
+                        <img className='book__image' src={book.imageLink} alt="book" style={{display:"block"}}/>
+                    </figure>
                 </figure>
-            </figure>
-            <div className="audio__track--details-wrapper">
-                <div className="audio__track--title">{book.title}</div>
-                <div className="audio__track--author">{book.author}</div>
+                <div className="audio__track--details-wrapper">
+                    <div className="audio__track--title">{book.title}</div>
+                    <div className="audio__track--author">{book.author}</div>
+                </div>
+            </div>
+            <div className="audio__controls--wrapper">
+                <div className="audio__controls">
+                    <button className="audio__controls--btn">
+                        <FontAwesomeIcon icon={faRotateLeft} onClick={() =>  {user.plan ? skipTime(-10) : toggleLogin()}}/>
+                    </button>
+                    <button className="audio__comntrols--btn audio__controls--btn-play" onClick={() => {user.plan ? toggleAudio() : toggleLogin()}}>
+                        {audioPlaying ? (
+                            <FontAwesomeIcon icon={faPlay}/>
+                        ) : (
+                            <FontAwesomeIcon icon={faPause}/>
+                        )}
+                    </button>
+                    <button className="audio__controls--btn">
+                        <FontAwesomeIcon icon={faRotateRight} onClick={() => {user.plan ? skipTime(10) : toggleLogin()}}/>
+                    </button>
+                </div>
+            </div>
+            <div className="audio__progress--wrapper">
+                <div className="audio__time">{`${(Math.floor(currentTime.current/60)).toString().padStart(2,"0")}:${(Math.floor(currentTime.current%60)).toString().padStart(2,"0")}`}</div>
+                <input type="range" className="audio__progress--bar" value={(currentTime.current/audio.duration)*100} onClick={() => {user.plan ? null : toggleLogin()}} onChange={(e) => {user.plan ? sliderMoved(e.target.value) : null}} max={100} style={{background:`linear-gradient(to right, rgb(43, 217, 124) ${(currentTime.current/audio.duration)*100}%, rgb(109, 120, 125) 0%)`}}/>
+                <div className="audio__time">{`${(Math.floor(audio.duration/60)).toString().padStart(2,"0")}:${(Math.floor(audio.duration%60)).toString().padStart(2,"0")}`}</div>
             </div>
         </div>
-        <div className="audio__controls--wrapper">
-            <div className="audio__controls">
-                <button className="audio__controls--btn">
-                    <FontAwesomeIcon icon={faRotateLeft} onClick={() =>  {user.plan ? skipTime(-10) : toggleLogin()}}/>
-                </button>
-                <button className="audio__comntrols--btn audio__controls--btn-play" onClick={() => {user.plan ? toggleAudio() : toggleLogin()}}>
-                    {audioPlaying ? (
-                        <FontAwesomeIcon icon={faPlay}/>
-                    ) : (
-                        <FontAwesomeIcon icon={faPause}/>
-                    )}
-                </button>
-                <button className="audio__controls--btn">
-                    <FontAwesomeIcon icon={faRotateRight} onClick={() => {user.plan ? skipTime(10) : toggleLogin()}}/>
-                </button>
-            </div>
-        </div>
-        <div className="audio__progress--wrapper">
-            <div className="audio__time">{`${(Math.floor(currentTime.current/60)).toString().padStart(2,"0")}:${(Math.floor(currentTime.current%60)).toString().padStart(2,"0")}`}</div>
-            <input type="range" className="audio__progress--bar" value={(currentTime.current/audio.duration)*100} onClick={() => {user.plan ? null : toggleLogin()}} onChange={(e) => {user.plan ? sliderMoved(e.target.value) : null}} max={100} style={{background:`linear-gradient(to right, rgb(43, 217, 124) ${(currentTime.current/audio.duration)*100}%, rgb(109, 120, 125) 0%)`}}/>
-            <div className="audio__time">{`${(Math.floor(audio.duration/60)).toString().padStart(2,"0")}:${(Math.floor(audio.duration%60)).toString().padStart(2,"0")}`}</div>
-        </div>
-    </div>
     )
+  }
+
+  function skeletonHTML() {
+    return (
+        <div className="audio__wrapper">
+            <div className="audio__track--wrapper">
+                <figure className="audio__track--image-mask">
+                    <figure className="book__image--wrapper" style={{height:"48px", width:"48px", minWidth:"48px"}}>
+                        <div className="skeleton" style={{height:"100%", width:"100%"}}></div>
+                    </figure>
+                </figure>
+                <div className="audio__track--details-wrapper">
+                    <div className="audio__track--title">
+                        <div className="skeleton" style={{height:"12px", width:"12vw"}}></div>
+                    </div>
+                    <div className="audio__track--author">
+                        <div className="skeleton" style={{height:"12px", width:"6vw"}}></div>
+                    </div>
+                </div>
+            </div>
+            <div className="audio__controls--wrapper">
+                <div className="audio__controls">
+                    <button className="audio__controls--btn">
+                        <FontAwesomeIcon icon={faRotateLeft}/>
+                    </button>
+                    <button className="audio__comntrols--btn audio__controls--btn-play">
+                        {audioPlaying ? (
+                            <FontAwesomeIcon icon={faPlay}/>
+                        ) : (
+                            <FontAwesomeIcon icon={faPause}/>
+                        )}
+                    </button>
+                    <button className="audio__controls--btn">
+                        <FontAwesomeIcon icon={faRotateRight}/>
+                    </button>
+                </div>
+            </div>
+            <div className="audio__progress--wrapper">
+                <div className="audio__time">00:00</div>
+                <input type="range" className="audio__progress--bar" value={0} max={100} disabled style={{background:`linear-gradient(to right, rgb(43, 217, 124) 0%, rgb(109, 120, 125) 0%)`}}/>
+                <div className="audio__time">00:00</div>
+            </div>
+        </div>  
+    )
+  }
+
+  return (
+    (book.id && audio?.duration ? playerHTML() : skeletonHTML())
   )
 }
