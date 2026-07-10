@@ -32,7 +32,7 @@ export default function page() {
         <div className="audio__book--summary-title">
             <b>{book.title}</b>
         </div>
-        {user ? (
+        {user.plan ? (
           <div className="audio__book--summary-text">
             {book.summary}
         </div>

@@ -15,7 +15,7 @@ export default function page() {
   return (
     <div className="row">
       <div className="container">
-        {user ? (
+        {user.plan ? (
           <>
           <div>
             <div className="for-you__title">Saved Books</div>

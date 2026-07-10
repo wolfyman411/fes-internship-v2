@@ -66,7 +66,7 @@ export default function page() {
   }
 
   function handleInput() {
-    if (user) {
+    if (user.plan) {
         if (user.plan === "basic" && book.subscriptionRequired) {
             router.push(`/choose-plan`)
         }
@@ -132,7 +132,7 @@ export default function page() {
                         </button>
                     </div>
                 </div>
-                <div className="inner-book__bookmark" onClick={() => {user ? toggleBook() : toggleLogin()}} key={buttonPressed}>
+                <div className="inner-book__bookmark" onClick={() => {user.plan ? toggleBook() : toggleLogin()}} key={buttonPressed}>
                     {user && user.savedBooks && user.savedBooks.includes(book.id) ? (
                         <>
                             <div className="inner-book__bookmark--icon">

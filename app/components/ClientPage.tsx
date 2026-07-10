@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import Searchbar from './Searchbar'
 import Sidebar from './Sidebar'
 import { onAuthStateChanged } from 'firebase/auth'
@@ -14,7 +14,7 @@ export default function ClientPage({children = <></>}) {
   const setUser = useBoundStore((state:any) => state.setUser)
   const pathname = usePathname()
 
-  React.useEffect(() => {
+  useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         getLastUser(user.email)

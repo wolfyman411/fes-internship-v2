@@ -13,7 +13,7 @@ export default function page() {
     <div className="container">
         <div className="row">
             <div className="section__title page__title">Settings</div>
-            {user ? (
+            {user.plan ? (
                 <>
                     <div className="setting__content">
                         <div className="settings__sub--title">Your Subscription Plan</div>

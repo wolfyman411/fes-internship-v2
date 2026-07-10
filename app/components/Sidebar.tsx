@@ -31,7 +31,14 @@ export default function Sidebar() {
 
   function logout() {
     signOut(auth)
-    setUser(null)
+    const userRef:User = {
+      password:"",
+      email:"",
+      savedBooks:[],
+      finishedBooks:[],
+      plan:"",
+    }
+    setUser(userRef)
   }
 
   return (
@@ -86,13 +93,13 @@ export default function Sidebar() {
               </div>
               <div className="sidebar__link--text">Help & Support</div>
             </div>
-            <div className="sidebar__link--wrapper" onClick={() => {user ? logout() : toggleLogin()}}>
+            <div className="sidebar__link--wrapper" onClick={() => {user.plan ? logout() : toggleLogin()}}>
               <div className="sidebar__link--line"></div>
               <div className="sidebar__icon--wrapper">
                 <FontAwesomeIcon icon={faRightFromBracket}/>
               </div>
               <div className="sidebar__link--text">
-                {user ? "Logout" : "Login"}
+                {user.plan ? "Logout" : "Login"}
               </div>
             </div>
           </div>
