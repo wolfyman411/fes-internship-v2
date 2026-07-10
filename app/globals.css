@@ -1644,20 +1644,26 @@ button:disabled {
 
 .collapse {
     position: relative;
-    height: 0;
     overflow: hidden;
-    transition: height .35s ease;
+    transition: grid-template-rows .35s ease;
+    grid-template-rows: 0fr;
+    display: grid;
 }
 
 .collapse.show {
-    height: auto;
+    grid-template-rows: 1fr;
 }
 
 .accordion__body {
     min-height: 1px;
-    padding-bottom: 24px;
+    padding-bottom: 0px;
     color: #394547;
     line-height: 1.5;
+    transition: padding-bottom .35s ease;
+}
+
+.show .accordion__body {
+    padding-bottom: 24px;
 }
 
 .accordion__icon--rotate {
@@ -1788,6 +1794,42 @@ button:disabled {
         display: flex;
     }
 
+    .plan__title {
+        font-size: 26px;
+        margin-bottom: 32px;
+    }
+
+    .plan__sub--title {
+        font-size: 16px;
+    }
+
+    .plan__features--wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .section__title {
+        font-size: 24px;
+    }
+
+    .plan__card--title {
+        font-size: 16px;
+    }
+
+    .plan__card--price {
+        font-size: 20px;
+    }
+
+    .plan__card--text {
+        font-size: 12px;
+    }
+
+    .accordion__title {
+        font-size: 20px;
+    }
+
+    .accordion__body {
+        font-size: 14px;
+    }
 }
 
 /* SMALL DEVICES */
@@ -1796,4 +1838,10 @@ button:disabled {
   .nav__list--mobile {
     display: none;
   }
+
+  .selected__book {
+    padding: 16px;
+  }
+
+
 }
