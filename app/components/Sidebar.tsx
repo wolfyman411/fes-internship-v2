@@ -14,7 +14,7 @@ import { auth } from '../firestore/firebase'
 import { usePathname } from 'next/navigation'
 import { User } from '../globals'
 
-export default function Sidebar({showSidebar = false, toggleSidebar}) {
+export default function Sidebar({showSidebar = false, toggleSidebar = (toggle:boolean) => {}}) {
 
   const setUser = useBoundStore((state:any) => state.setUser)
   const user = useBoundStore((state:any) => state.user)
@@ -87,8 +87,11 @@ export default function Sidebar({showSidebar = false, toggleSidebar}) {
     element.classList.add("sidebar__font--size-icon--active")
 
     // Change the reading size
-    const bookSummary = document.querySelector(".audio__book--summary")
-    bookSummary.style.fontSize = size
+    const bookSummary:HTMLElement|null = document.querySelector(".audio__book--summary")
+
+    if (bookSummary) {
+      bookSummary.style.fontSize = size
+    }
   }
 
   function logout() {

@@ -33,7 +33,7 @@ export default function RootLayout({
       <body>
         <Login />
         <div>
-          <ClientPage children={children}/>
+          <ClientPage children={children as React.ReactElement}/>
         </div>
       </body>
     </html>

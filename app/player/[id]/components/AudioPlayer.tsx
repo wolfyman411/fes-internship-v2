@@ -97,6 +97,10 @@ export default function AudioPlayer({book = {} as Book}) {
   }
 
   function sliderMoved(value:string) {
+    if (!audio) {
+        return
+    }
+
     const playElement:HTMLAudioElement|null = document.querySelector(".book__audio")
     const ratio = audio.duration*(parseFloat(value)/100)
 
@@ -113,6 +117,10 @@ export default function AudioPlayer({book = {} as Book}) {
     const playElement:HTMLAudioElement|null = document.querySelector(".book__audio")
 
     currentTime.current += value
+
+    if (!audio) {
+        return
+    }
 
     // Clamp
     if (currentTime.current <= 0) {
@@ -163,8 +171,8 @@ export default function AudioPlayer({book = {} as Book}) {
             </div>
             <div className="audio__progress--wrapper">
                 <div className="audio__time">{`${(Math.floor(currentTime.current/60)).toString().padStart(2,"0")}:${(Math.floor(currentTime.current%60)).toString().padStart(2,"0")}`}</div>
-                <input type="range" className="audio__progress--bar" value={(currentTime.current/audio.duration)*100} onClick={() => {user.plan ? null : toggleLogin()}} onChange={(e) => {user.plan ? sliderMoved(e.target.value) : null}} max={100} style={{background:`linear-gradient(to right, rgb(43, 217, 124) ${(currentTime.current/audio.duration)*100}%, rgb(109, 120, 125) 0%)`}}/>
-                <div className="audio__time">{`${(Math.floor(audio.duration/60)).toString().padStart(2,"0")}:${(Math.floor(audio.duration%60)).toString().padStart(2,"0")}`}</div>
+                <input type="range" className="audio__progress--bar" value={audio ? (currentTime.current/audio.duration)*100 : 0} onClick={() => {user.plan ? null : toggleLogin()}} onChange={(e) => {user.plan ? sliderMoved(e.target.value) : null}} max={100} style={{background:`linear-gradient(to right, rgb(43, 217, 124) ${audio ? (currentTime.current/audio.duration)*100: 0}%, rgb(109, 120, 125) 0%)`}}/>
+                <div className="audio__time">{`${audio ? (Math.floor(audio.duration/60)).toString().padStart(2,"0") : "00"}:${audio ? (Math.floor(audio.duration%60)).toString().padStart(2,"0"): "00"}`}</div>
             </div>
         </div>
     )

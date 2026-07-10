@@ -9,7 +9,7 @@ import axios from 'axios'
 import { Book, getAudioDuration, User } from '../globals'
 import { faClock } from '@fortawesome/free-regular-svg-icons'
 
-export default function Searchbar({toggleSidebar}) {
+export default function Searchbar({toggleSidebar = (toggle:boolean) => {}}) {
 
   const [searchText,setSearchText] = useState("")
   const [booksData,setBooksData] = useState([] as Book[])
@@ -40,17 +40,23 @@ export default function Searchbar({toggleSidebar}) {
   }
 
   function clearSearch() {
-    const searchBarHTML = document.querySelector(".search__input")
-    searchBarHTML.value = ""
+    const searchBarHTML:HTMLInputElement|null = document.querySelector(".search__input")
+
+    if (searchBarHTML) {
+      searchBarHTML.value = ""
+    }
 
     setSearchText("")
   }
 
-  function debounce(func, timeout = 300){
-    let timer:any;
-    return (...args) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => { func.apply(this, args); }, timeout);
+  function debounce(func:any, timeout = 300){
+    let timer:NodeJS.Timeout|null = null;
+
+    return function(this: any, ...args: any[]) {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        func.apply(this, args);
+      }, timeout);
     };
   }
 

@@ -50,6 +50,10 @@ export default function page() {
 
   function toggleBook() {
 
+    if (!auth.currentUser) {
+        return
+    }
+
     setButtonPressed(buttonPressed + 1)
 
     const index:number|undefined = user.savedBooks.findIndex((e) => e === book.id)
