@@ -22,7 +22,7 @@ export default function page() {
   },[plusSelected])
 
   async function handleCheckout() {
-    const priceId = "price_1TrRV1AEHUixjDPEa1YvkqcH"
+    const priceId = plusSelected ? "price_1TrRV1AEHUixjDPEa1YvkqcH" : "price_1TrRUdAEHUixjDPEl6T62xac"
     const checkoutUrl = await getCheckoutUrl(app,priceId)
     router.push(checkoutUrl)
   }
