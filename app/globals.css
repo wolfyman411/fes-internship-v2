@@ -1830,6 +1830,51 @@ button:disabled {
     .accordion__body {
         font-size: 14px;
     }
+
+    .inner__wrapper {
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    .inner__book {
+        order: 1;
+    }
+
+    .inner-book__title {
+        font-size: 24px;
+    }
+
+    .inner-book__author, .inner-book__author--description, .inner-book__book--description, .inner-book__tag {
+        font-size: 14px;
+    }
+
+    .inner-book__bookmark {
+        font-size: 16px;
+    }
+
+    .inner-book--img-wrapper {
+        display: flex;
+        justify-content: center;
+    }
+
+    .audio__book--summary-title {
+        font-size: 20px;
+    }
+
+    .audio__book--summary-text {
+        font-size: 14px;
+    }
+
+    .audio__wrapper {
+        height: 180px;
+        padding: 16px 24px;
+        flex-direction: column;
+    }
+
+    .audio__wrapper>div {
+        width: 100%;
+        justify-content: center;
+    }
 }
 
 /* SMALL DEVICES */
