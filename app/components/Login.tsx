@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import googleImg from "../assets/google.png"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMultiply, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faMultiply, faSpinner, faUser } from '@fortawesome/free-solid-svg-icons'
 import { useBoundStore } from '../zustand/zustand'
 import Link from 'next/link'
 import { app, auth, db, provider } from '../firestore/firebase'
@@ -27,6 +27,7 @@ export default function Login() {
   const [formPassword,setFormPassword] = useState("")
   const [authError,setAuthError] = useState("")
   const [authSuccess,setAuthSuccess] = useState("")
+  const [loginState,setLoginState] = useState("") // Changes between Guest or Google when login pressed
 
   useEffect(() => {
     setPageState(0)
@@ -72,6 +73,7 @@ export default function Login() {
   }
 
   async function logInGoogle() {
+    setLoginState("google")
     signInWithPopup(auth,provider)
         .then(async (result) => {
             const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -114,6 +116,7 @@ export default function Login() {
         }).catch((e) => {
             const credential = GoogleAuthProvider.credentialFromError(e);
             setAuthError("Google log in failed")
+            setLoginState("")
         })
   }
 
@@ -165,6 +168,8 @@ export default function Login() {
   }
 
   async function signInGuest() {
+
+    setLoginState("guest")
 
     const docRef = doc(db, "users", "hy42gbx8vke5yHRlqzujc318Z8t1"); //HARD CODED GUEST ID
     const docSnap = await getDoc(docRef);
@@ -245,19 +250,31 @@ export default function Login() {
                     <div className="auth__title">Log in to Summarist</div>
                     <div className="auth__error">{authError}</div>
                     <button className="btn guest__btn--wrapper" onClick={() => {signInGuest()}}>
-                        <figure className="google__icon--mask guest__icon--mask">
-                            <FontAwesomeIcon icon={faUser}/>
-                        </figure>
-                        <div>Login as a Guest</div>
+                        {loginState === "guest" ? (
+                            <FontAwesomeIcon icon={faSpinner}/>
+                        ) : (
+                            <>
+                            <figure className="google__icon--mask guest__icon--mask">
+                                <FontAwesomeIcon icon={faUser}/>
+                            </figure>
+                            <div>Login as a Guest</div>
+                            </>
+                        )}
                     </button>
                     <div className="auth__separator">
                         <div className="auth__separator--text">or</div>
                     </div>
                     <button className="btn google__btn--wrapper" onClick={() => {logInGoogle()}}>
-                        <figure className="google__icon--mask">
-                            <Image src={googleImg} alt="google"/>
-                        </figure>
-                        <div>Login with Google</div>
+                        {loginState === "google" ? (
+                            <FontAwesomeIcon icon={faSpinner}/>
+                        ) : (
+                            <>
+                            <figure className="google__icon--mask">
+                                <Image src={googleImg} alt="google"/>
+                            </figure>
+                            <div>Login with Google</div>
+                            </>
+                        )}
                     </button>
                     <div className="auth__separator">
                         <div className="auth__separator--text">or</div>
@@ -288,10 +305,16 @@ export default function Login() {
                     <div className="auth__title">Sign up to Summarist</div>
                     <div className="auth__error">{authError}</div>
                     <button className="btn google__btn--wrapper" onClick={() => {logInGoogle()}}>
-                        <figure className="google__icon--mask">
-                            <Image src={googleImg} alt="google"/>
-                        </figure>
-                        <div>Sign up with Google</div>
+                        {loginState === "google" ? (
+                            <FontAwesomeIcon icon={faSpinner}/>
+                        ) : (
+                            <>
+                            <figure className="google__icon--mask">
+                                <Image src={googleImg} alt="google"/>
+                            </figure>
+                            <div>Sign up with Google</div>
+                            </>
+                        )}
                     </button>
                     <div className="auth__separator">
                         <div className="auth__separator--text">or</div>
